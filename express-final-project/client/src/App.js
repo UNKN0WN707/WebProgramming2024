@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import AddAnimeForm from './components/AddAnimeForm';
+import EditAnimeForm from './components/EditAnimeForm';
 
 function App() {
   const [animes, setAnimes] = useState([]);
+  const [editingAnime, setEditingAnime] = useState(null); // State to track the anime being edited
 
   useEffect(() => {
     fetch('/api/animes')
@@ -13,6 +15,13 @@ function App() {
 
   const handleAddAnime = (newAnime) => {
     setAnimes(currentAnimes => [...currentAnimes, newAnime]);
+  };
+
+  const handleUpdateAnime = (updatedAnime) => {
+    setAnimes(currentAnimes =>
+      currentAnimes.map(anime => anime.id === updatedAnime.id ? updatedAnime : anime)
+    );
+    setEditingAnime(null); // Reset the editing state after update
   };
 
   const handleDeleteAnime = (id) => {
@@ -36,11 +45,16 @@ function App() {
         {animes.map(anime => (
           <li key={anime.id}>
             {anime.title} - {anime.genre}
+            <button onClick={() => setEditingAnime(anime)}>Edit</button>
             <button onClick={() => handleDeleteAnime(anime.id)}>Delete</button>
           </li>
         ))}
       </ul>
-      <AddAnimeForm onAnimeAdd={handleAddAnime} />
+      {editingAnime ? (
+        <EditAnimeForm anime={editingAnime} onAnimeUpdate={handleUpdateAnime} />
+      ) : (
+        <AddAnimeForm onAnimeAdd={handleAddAnime} />
+      )}
     </div>
   );
 }

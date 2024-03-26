@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-// In AddAnimeForm.js
 function AddAnimeForm({ onAnimeAdd }) {
     const [title, setTitle] = useState('');
     const [genre, setGenre] = useState('');
