@@ -1,0 +1,25 @@
+/**
+ *   Programmers: Andy Tran, Sreypich Heng
+ *   Rowan University
+ *   Course: Web Programming CS04305
+ *   Instructor: Marquise Pullen
+ *
+ *   Description: stylesheet for Navbar component.
+ */
+
+ nav {
+    display: flex;
+    justify-content: space-between;
+    padding-left: 2em;
+    padding-right: 2em;
+ }
+
+ nav ul {
+    display: flex;
+ }
+
+ nav ul li {
+   margin: 10px;
+   list-style: none;
+ }
+
