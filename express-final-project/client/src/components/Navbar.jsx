@@ -12,16 +12,19 @@ import './Navbar.css'
 
 const Navbar = () => {
     return (
-        <nav> 
-            <h1>Anime Collection Tracker</h1>
+        <nav>
+            <div className="logo"> 
+                <h1>ROWAN WEB</h1>
+                <h2>PROGRAMMING</h2>
+            </div>
 
-            <ul>
+            <ul className="navButtons">
                 <li><a href="#">HOME</a></li>
                 <li><a href="#">ABOUT</a></li>
                 <li><a href="#">CONTACT</a></li>
             </ul>
         </nav>
     );
-}
+};
 
 export default Navbar;

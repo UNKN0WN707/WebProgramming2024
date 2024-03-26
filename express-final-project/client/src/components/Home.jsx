@@ -9,10 +9,16 @@
 
 import React from 'react';
 import Navbar from './Navbar';
+import Hero from './Hero';
+import Form from './Form';
 
 const Home = () => {
     return(
-        <Navbar />
+        <div>
+            <Navbar />
+            <Hero />
+            <Form />
+        </div>  
     );
 }
 
