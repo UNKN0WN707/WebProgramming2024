@@ -8,8 +8,8 @@
  */
 
  .foreground2 {
-    display: flex;
     width: 1024px;
+    padding: 40px;
     justify-content: center;
     margin: auto;
     background-color: white;
@@ -18,36 +18,36 @@
     box-shadow: 2px 3px 3px;
  }
 
- .border {
-    width: 1024px;
-    justify-content: center;
-    margin: auto;
-    background-color: white;
-    padding: 40px;
-    position: relative;
-    bottom: 40px;
-    box-shadow: 2px 3px 3px;
+ .list {
+    display: flex;
  }
  
  .trash {
-    width: 20px;
-    height: 30px;
+    width: 15px;
+    height: 20px;
  }
 
- .options p {
-    font-size: 40px;
+ .options button {
+    font-size: 30px;
     font-weight: bold;
-    margin-right: 7px;
+    margin-right: 0px;
+    border: 0px;
+    background-color: transparent;
+    padding-left: 2px;
  }
 
  .options {
     display: flex;
     width: 100px;
-    height: 50px;
+    height: 40px;
     justify-content: center;
-    align-items: center;
     padding-right: 5px;
     padding-left: 10px;
+ }
+
+ .remove {
+   position: relative;
+   bottom: 2px;
  }
 
  .titles {
@@ -56,6 +56,12 @@
 
  table {
     border-spacing: 0px;
+    width: 800px;
+    margin: auto;
+ }
+
+ tr:nth-child(odd) {
+   background-color: #ffd5d5;
  }
 
  .titles th {
@@ -82,4 +88,14 @@
  #action {
     text-align: right;
     padding-right: 2em;
+ }
+
+ hr {
+   background-color: rgb(240, 240, 240);
+   height: 9px;
+   border: 0px;
+ }
+
+ .bottom {
+   margin-bottom: 50px;
  }
