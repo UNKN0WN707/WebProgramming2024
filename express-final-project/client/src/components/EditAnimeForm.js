@@ -7,7 +7,7 @@ function EditAnimeForm({ anime, onAnimeUpdate }) {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    fetch(`/api/animes/${anime.id}`, {
+    fetch('/api/animes/${anime.id}', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ title, genre }),

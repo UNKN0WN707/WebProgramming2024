@@ -25,7 +25,7 @@ function App() {
   };
 
   const handleDeleteAnime = (id) => {
-    fetch(`/api/animes/${id}`, {
+    fetch('/api/animes/${id}', {
       method: 'DELETE',
     })
     .then(response => {
