@@ -11,6 +11,7 @@ import React from 'react';
 import Navbar from './Navbar';
 import Hero from './Hero';
 import Form from './Form';
+import Results from './Results';
 
 const Home = () => {
     
@@ -28,6 +29,7 @@ const Home = () => {
             <Navbar />
             <Hero />
             <Form changeValue={changeValue}/>
+            <Results />
         </div>  
     );
 }

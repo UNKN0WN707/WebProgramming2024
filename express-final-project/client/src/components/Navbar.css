@@ -53,7 +53,7 @@
 
   .navButtons a {
     text-decoration: none;
-    color: gray;
+    color: white;
     padding-top: 35px;
     padding-bottom: 35px;
     padding-left: 10px;
@@ -62,7 +62,7 @@
 
  .navButtons li a:hover {
    background-color: #1d1d29;
-   color: white;
+   color: rgb(211, 211, 211);
    border-top-color: #f18f8f;
    border-top-width: 2px;
    border-left: 0px;

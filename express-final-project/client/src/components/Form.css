@@ -54,11 +54,14 @@
    bottom: 30px;
  }
 
- #anime {
+ .button:hover {
+   background-color: #ce7b7b;
+ }
+
+ #input {
    width: 300px;
    height: 30px;
    border-radius: 10px;
-   color: #e4e1e1;
    border-color: #e4e1e1;
  }
 
@@ -66,13 +69,9 @@
    margin: 0px;
    width: 300px;
    height: 40px;
-   position: relative;
-   bottom: 30px;
  }
 
  #score {
    font-size: 20px;
    margin: 0px;
-   position: relative;
-   bottom: 30px;
  }

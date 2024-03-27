@@ -28,7 +28,8 @@ const Form = ({ changeValue }) => {
                 
                 <form>
                     <p>Anime Entry Form</p><br/>
-                    <input type="text" id="anime" placeholder="Enter Anime Here" /><br/><br/>
+                    <input type="text" id="input" placeholder="Enter Anime Here" /><br/>
+                    <input type="text" id="input" placeholder="Enter Genre Here" /><br/>
                     <p id="score">Score: 5</p>
                     <input type="range" min="1" max="10" defaultValue="5" onChange={changeValue} id="slider" /><br/><br/>
                     <input type="submit" value="Submit" className="button" />

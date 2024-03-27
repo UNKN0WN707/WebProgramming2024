@@ -1,0 +1,85 @@
+/**
+ *   Programmers: Andy Tran, Sreypich Heng
+ *   Rowan University
+ *   Course: Web Programming CS04305
+ *   Instructor: Marquise Pullen
+ *
+ *   Description: stylesheet for Results component.
+ */
+
+ .foreground2 {
+    display: flex;
+    width: 1024px;
+    justify-content: center;
+    margin: auto;
+    background-color: white;
+    position: relative;
+    bottom: 40px;
+    box-shadow: 2px 3px 3px;
+ }
+
+ .border {
+    width: 1024px;
+    justify-content: center;
+    margin: auto;
+    background-color: white;
+    padding: 40px;
+    position: relative;
+    bottom: 40px;
+    box-shadow: 2px 3px 3px;
+ }
+ 
+ .trash {
+    width: 20px;
+    height: 30px;
+ }
+
+ .options p {
+    font-size: 40px;
+    font-weight: bold;
+    margin-right: 7px;
+ }
+
+ .options {
+    display: flex;
+    width: 100px;
+    height: 50px;
+    justify-content: center;
+    align-items: center;
+    padding-right: 5px;
+    padding-left: 10px;
+ }
+
+ .titles {
+    border: solid 2px black;
+ }
+
+ table {
+    border-spacing: 0px;
+ }
+
+ .titles th {
+    padding: 10px;
+    padding-right: 3em;
+    padding-left: 3em;
+    margin: 0px;
+    background-color: #f18f8f;
+    color: white;
+    width: 100px;
+ }
+
+ td {
+    text-align: center;
+    margin-left: 4em;
+ }
+
+ #title {
+    padding-left: 1em;
+    width: 600px;
+    text-align: left;
+ }
+
+ #action {
+    text-align: right;
+    padding-right: 2em;
+ }
