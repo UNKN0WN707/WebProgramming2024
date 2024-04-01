@@ -1,13 +1,49 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
+import AddAnimeForm from './components/AddAnimeForm';
+import EditAnimeForm from './components/EditAnimeForm';
 import Home from './components/Home';
 
 function App() {
+  const [animes, setAnimes] = useState([]);
+  const [editingAnime, setEditingAnime] = useState(null); // State to track the anime being edited
+
+  useEffect(() => {
+    fetch('/api/animes')
+      .then(response => response.json())
+      .then(data => setAnimes(data))
+      .catch(error => console.error("There was an error!", error));
+  }, []);
+
+  const handleAddAnime = (newAnime) => {
+    setAnimes(currentAnimes => [...currentAnimes, newAnime]);
+  };
+
+  const handleUpdateAnime = (updatedAnime) => {
+    setAnimes(currentAnimes =>
+      currentAnimes.map(anime => anime.id === updatedAnime.id ? updatedAnime : anime)
+    );
+    setEditingAnime(null); // Reset the editing state after update
+  };
+
+  const handleDeleteAnime = (id) => {
+    fetch('/api/animes/${id}', {
+      method: 'DELETE',
+    })
+    .then(response => {
+      if (response.ok) {
+        setAnimes(currentAnimes => currentAnimes.filter(anime => anime.id !== id));
+      } else {
+        console.error('Failed to delete the anime.');
+      }
+    })
+    .catch(error => console.error('There was an error!', error));
+  };
+
   return (
     <div>
-      <Home />
+      
     </div>
-  )
+  );
 }
 
-export default App
-
+export default App;
