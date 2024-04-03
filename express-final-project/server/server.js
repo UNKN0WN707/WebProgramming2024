@@ -9,12 +9,13 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
-const port = 8000;
+const port = 8081;
 
 // Connect to the MongoDB database
-mongoose.connect('mongodb://localhost:27017/animes')
-        .then(() => console.log('Connected to database'))
-        .catch((err) => console.log(err))
+mongoose.connect('mongodb://localhost:27017')
+  .then(() => console.log('Connected to database'))
+  .catch(err => console.error('Could not connect to database ...', err));
+
 
 // Schema and Model
 const animeSchema = new mongoose.Schema({
@@ -26,11 +27,18 @@ const AnimeModel = mongoose.model('Anime', animeSchema);
 
 app.use(express.json());
 
-// Mock data for anime collection
-let animes = [
-  { id: 1, title: "Attack on Titan", genre: "Action, Dark Fantasy, Post-apocalyptic" },
-  { id: 2, title: "My Hero Academia", genre: "Superhero, Action" }
+// Mock data
+const mockData = [
+  { title: 'Naruto', genre: 'Action' },
+  { title: 'One Piece', genre: 'Adventure' },
+  { title: 'Death Note', genre: 'Mystery' }
 ];
+
+// Insert mock data into the database
+AnimeModel.insertMany(mockData)
+  .then(() => console.log('Mock data inserted'))
+  .catch(err => console.error('Failed to insert mock data:', err));
+
 
 // GET all animes
 app.get('/api/animes', async (req, res) => {
@@ -44,12 +52,17 @@ app.get('/api/animes', async (req, res) => {
 
 // GET a single anime by id
 app.get('/api/animes/:id', async (req, res) => {
-  const anime = await AnimeModel.find(a => a.id === parseInt(req.params.id));
-  if (!anime) {
-    return res.status(404).send('Anime not found');
+  try {
+    const anime = await AnimeModel.findById(req.params.id);
+    if (!anime) {
+      return res.status(404).send('Anime not found');
+    }
+    res.json(anime);
+  } catch (error) {
+    res.status(500).send(error);
   }
-  res.json(anime);
 });
+
 
 // POST a new anime
 app.post('/api/animes', async (req, res) => {
@@ -69,17 +82,14 @@ app.post('/api/animes', async (req, res) => {
 
 // PUT update an anime
 app.put('/api/animes/:id', async (req, res) => {
-  const { id } = req.params.id;
   const { title, genre } = req.body;
 
   try {
-    const updatedAnime = await AnimeModel.findByIdAndUpdate(id, { title, genre });
-
-    if (updatedAnime) {
-      res.json(updatedAnime);
-    } else {
-      res.status(404).send('Anime Not Found');
+    const updatedAnime = await AnimeModel.findByIdAndUpdate(req.params.id, { title, genre }, { new: true });
+    if (!updatedAnime) {
+      return res.status(404).send('Anime Not Found');
     }
+    res.json(updatedAnime);
   } catch (error) {
     res.status(500).send(error);
   }
@@ -87,20 +97,17 @@ app.put('/api/animes/:id', async (req, res) => {
 
 // DELETE an anime
 app.delete('/api/animes/:id', async (req, res) => {
-  const { id } = req.params;
-
   try {
-    const deletedAnime = await AnimeModel.findByIdAndDelete(id);
-
-    if (deletedAnime) {
-      res.status(204).send(); //Nothing to send back
-    } else {
-      res.status(404).send('Anime Not Found');
+    const deletedAnime = await AnimeModel.findByIdAndDelete(req.params.id);
+    if (!deletedAnime) {
+      return res.status(404).send('Anime Not Found');
     }
+    res.status(204).send();
   } catch (error) {
     res.status(500).send(error);
   }
 });
+
 
 app.listen(port, () => {
   console.log(`Anime Collection Tracker API running at http://localhost:${port}`);

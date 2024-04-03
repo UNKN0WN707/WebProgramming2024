@@ -1,47 +1,51 @@
 import React, { useState } from 'react';
 
-function AddAnimeForm({ onAnimeAdd }) {
-    const [title, setTitle] = useState('');
-    const [genre, setGenre] = useState('');
-  
-    const handleSubmit = (event) => {
-      event.preventDefault();
-  
-      fetch('/api/animes', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, genre }),
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log('New anime added', data);
-        onAnimeAdd(data); // Update the animes list in App.js
-        setTitle('');
-        setGenre('');
-      })
-      .catch(error => console.error('There was an error!', error));
-    };
+function AddAnimeForm({ onAddAnime }) {
+  const [title, setTitle] = useState('');
+  const [genre, setGenre] = useState('');
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const newAnime = { title, genre };
+
+    // Send POST request to server endpoint
+    fetch('/api/animes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newAnime),
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Success:', data);
+      // Call the onAddAnime function passed as prop
+      onAddAnime(data);
+      // Clear form fields
+      setTitle('');
+      setGenre('');
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+  };
 
   return (
-    <div>
-      <h1>Add New Anime</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>
-            Title:
-            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
-          </label>
-        </div>
-        <div>
-          <label>
-            Genre:
-            <input type="text" value={genre} onChange={(e) => setGenre(e.target.value)} />
-          </label>
-        </div>
-        <button type="submit">Add Anime</button>
-      </form>
-    </div>
+    <form onSubmit={handleSubmit}>
+      <label>Title:</label>
+      <input
+        type="text"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+      />
+      <label>Genre:</label>
+      <input
+        type="text"
+        value={genre}
+        onChange={(e) => setGenre(e.target.value)}
+      />
+      <button type="submit">Add Anime</button>
+    </form>
   );
 }
 
