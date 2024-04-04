@@ -1,14 +1,18 @@
-/*
-  Programmers: Andy Tran, Sreypich Heng
-
-  Description: Server side of the final project using Express and MongoDB.
-*/
+/**
+ *   Programmers: Andy Tran, Sreypich Heng
+ *   Rowan University
+ *   Course: Web Programming CS04305
+ *   Instructor: Marquise Pullen
+ *
+ *   Description: Server side of the final project using Express and MongoDB.
+ */
 
 // Running database ("/c/Program Files/MongoDB/Server/7.0/bin/mongod.exe" --dbpath="C:\Web Dev\Web Programming\data\animes")
 
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
+const router = express.Router();
 const port = 8000;
 
 // Connect to the MongoDB database
@@ -16,13 +20,22 @@ mongoose.connect('mongodb://localhost:27017/animes')
         .then(() => console.log('Connected to database'))
         .catch((err) => console.log(err))
 
-// Schema and Model
+// Anime Schema and Model
 const animeSchema = new mongoose.Schema({
   title: { type: String, required: true, unique: true },
   genre: { type: String, required: true }
 });
 
 const AnimeModel = mongoose.model('Anime', animeSchema);
+
+// Contact Schema and Model
+const contactSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  feedback: { type: String, required: true}
+});
+
+const ContactModel = mongoose.model('Contact', contactSchema);
 
 app.use(express.json());
 
@@ -31,6 +44,16 @@ let animes = [
   { id: 1, title: "Attack on Titan", genre: "Action, Dark Fantasy, Post-apocalyptic" },
   { id: 2, title: "My Hero Academia", genre: "Superhero, Action" }
 ];
+
+// GET all the feedback from Contact Form
+router.get('/api/contacts', async (req, res) => {
+  try {
+    const feedbacks = await ContactModel.find({});
+    res.json(feedbacks);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
 
 // GET all animes
 app.get('/api/animes', async (req, res) => {
@@ -51,8 +74,24 @@ app.get('/api/animes/:id', async (req, res) => {
   res.json(anime);
 });
 
+// POST new feedback
+router.post('/api/contacts', async (req, res) => {
+  const { name, email, feedback } = req.body;
+
+  const inquire = new ContactModel({
+    name, email, feedback
+  });
+
+  try {
+    const newFeedback = await inquire.save()
+    res.status(201).send(inquire);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 // POST a new anime
-app.post('/api/animes', async (req, res) => {
+router.post('/api/animes', async (req, res) => {
   const { title, genre } = req.body;
 
   const anime = new AnimeModel({
@@ -67,8 +106,26 @@ app.post('/api/animes', async (req, res) => {
   }
 });
 
+// PUT update feedback
+router.put('/api/contacts/:id', async (req, res) => {
+  const { id } = req.params.id;
+  const { name, email, feedback } = req.body;
+
+  try {
+    const updatedFeedback = await ContactModel.findByIdAndUpdate(id, { name, email, feedback });
+
+    if (updatedFeedback) {
+      res.json(updatedFeedback);
+    } else {
+      res.status(404).send('Feedback Not Found');
+    }
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 // PUT update an anime
-app.put('/api/animes/:id', async (req, res) => {
+router.put('/api/animes/:id', async (req, res) => {
   const { id } = req.params.id;
   const { title, genre } = req.body;
 
@@ -85,8 +142,25 @@ app.put('/api/animes/:id', async (req, res) => {
   }
 });
 
+// DELETE a piece of feedback
+router.delete('/api/contacts/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deletedContact = await ContactModel.findByIdAndDelete(id);
+
+    if (deletedContact) {
+      res.status(204).send(); //Nothing to send back
+    } else {
+      res.status(404).send('Feedback Not Found');
+    }
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 // DELETE an anime
-app.delete('/api/animes/:id', async (req, res) => {
+router.delete('/api/animes/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -101,6 +175,8 @@ app.delete('/api/animes/:id', async (req, res) => {
     res.status(500).send(error);
   }
 });
+
+app.use('/', router);
 
 app.listen(port, () => {
   console.log(`Anime Collection Tracker API running at http://localhost:${port}`);
