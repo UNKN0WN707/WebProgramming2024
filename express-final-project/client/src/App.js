@@ -41,7 +41,21 @@ function App() {
 
   return (
     <div>
-      
+      <h1>Anime Collection</h1>
+      <ul>
+        {animes.map(anime => (
+          <li key={anime.id}>
+            {anime.title} - {anime.genre}
+            <button onClick={() => setEditingAnime(anime)}>Edit</button>
+            <button onClick={() => handleDeleteAnime(anime.id)}>Delete</button>
+          </li>
+        ))}
+      </ul>
+      {editingAnime ? (
+        <EditAnimeForm anime={editingAnime} onAnimeUpdate={handleUpdateAnime} />
+      ) : (
+        <AddAnimeForm onAnimeAdd={handleAddAnime} />
+      )}
     </div>
   );
 }
