@@ -16,7 +16,7 @@ COPY . .
 EXPOSE 3000
 
 # Define environment variables
-ENV EXPRESS_URL http://localhost:3001
+ENV EXPRESS_URL http://localhost:3000
 
 # Define the command to run the Express app
 CMD ["npm", "start"]
