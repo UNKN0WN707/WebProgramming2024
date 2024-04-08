@@ -10,9 +10,12 @@
 // Running database ("/c/Program Files/MongoDB/Server/7.0/bin/mongod.exe" --dbpath="C:\Web Dev\Web Programming\data\animes")
 
 const express = require('express');
+const cors = require('cors');
 const mongoose = require('mongoose');
+
 const app = express();
 const router = express.Router();
+app.use(require('cors')())
 const port = 8000;
 
 // Connect to the MongoDB database
