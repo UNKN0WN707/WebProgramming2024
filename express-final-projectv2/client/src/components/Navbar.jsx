@@ -8,7 +8,8 @@
  */
 
 import React from 'react';
-import './Navbar.css'
+import { Link } from 'react-router-dom';
+import './Navbar.css';
 
 const Navbar = () => {
     return (
@@ -19,9 +20,15 @@ const Navbar = () => {
             </div>
 
             <ul className="navButtons">
-                <li><a href="#">HOME</a></li>
-                <li><a href="#">ABOUT</a></li>
-                <li><a href="#">CONTACT</a></li>
+                <li>
+                    <Link to="/">HOME</Link>
+                </li>
+                <li>
+                    <Link to="/about">ABOUT</Link>
+                </li>
+                <li>
+                    <Link to="/contact">CONTACT</Link>
+                </li>        
             </ul>
         </nav>
     );

@@ -7,12 +7,17 @@ function EditAnimeForm({ anime, onAnimeUpdate }) {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    fetch('/api/animes/${anime.id}', {
+    fetch(`/api/animes/${anime.id}`, { // Make sure to use backticks here
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ title, genre }),
     })
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
     .then(updatedAnime => {
       console.log('Anime updated', updatedAnime);
       onAnimeUpdate(updatedAnime); // Trigger an update in the parent component
