@@ -1,0 +1,47 @@
+version: '3'
+services:
+  react:
+    container_name: react-container
+    build: ./client
+    image: react-image
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      EXPRESS_URL: "http://localhost:3000"
+    depends_on:
+      - express
+      - mongo
+  express:
+    container_name: express-container
+    build: ./server
+    image: express-image
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongo
+  mongo:
+    container_name: mongo-container
+    build: ./mongodb
+    image: mongo-image
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongodb/mongo-data:/data/db
+  nginx:
+    container_name: nginx-container
+    build: ./nginx
+    image: nginx-image
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/logs:/var/log/nginx
+    depends_on:
+      - react
+      - express
+
+volumes:
+  mongo-data:
