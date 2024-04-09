@@ -42,6 +42,14 @@ const ContactModel = mongoose.model('Contact', contactSchema);
 
 app.use(express.json());
 
+// User Schema and Model
+const userSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  password: { type: String, required: true }
+});
+
+const UserModel = mongoose.model('User', userSchema);
+
 // Mock data for anime collection
 let animes = [
   { id: 1, title: "Attack on Titan", genre: "Action, Dark Fantasy, Post-apocalyptic" },
@@ -59,7 +67,7 @@ router.get('/api/contacts', async (req, res) => {
 });
 
 // GET all animes
-app.get('/api/animes', async (req, res) => {
+router.get('/api/animes', async (req, res) => {
   try {
     const storedAnimes = await AnimeModel.find({});
     res.json(storedAnimes);
@@ -68,8 +76,18 @@ app.get('/api/animes', async (req, res) => {
   }
 });
 
+// Get a user by name
+router.get('/api/users/:name', async (req, res) => {
+  const user = await UserModel.find(a => a.name === req.params.name);
+
+  if (!user) {
+    return res.status(404).send('User not found');
+  }
+  res.json(user);
+});
+
 // GET a single anime by id
-app.get('/api/animes/:id', async (req, res) => {
+router.get('/api/animes/:id', async (req, res) => {
   const anime = await AnimeModel.find(a => a.id === parseInt(req.params.id));
   if (!anime) {
     return res.status(404).send('Anime not found');
@@ -88,6 +106,22 @@ router.post('/api/contacts', async (req, res) => {
   try {
     const newFeedback = await inquire.save()
     res.status(201).send(inquire);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+// POST a new user
+router.post('/api/users', async (req, res) => {
+  const { name, password } = req.body;
+
+  const user = new UserModel({
+    name, password
+  });
+
+  try {
+    const newUser = await user.save()
+    res.status(201).send(newUser);
   } catch (error) {
     res.status(500).send(error);
   }
@@ -127,6 +161,24 @@ router.put('/api/contacts/:id', async (req, res) => {
   }
 });
 
+// PUT update a user
+router.put('/api/user/:id', async (req, res) => {
+  const { id } = req.params.id;
+  const { password } = req.body;
+
+  try {
+    const updatedUser = await UserModel.findByIdAndUpdate(id, { password });
+
+    if (updatedUser) {
+      res.json(updatedUser);
+    } else {
+      res.status(404).send('User Not Found');
+    }
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 // PUT update an anime
 router.put('/api/animes/:id', async (req, res) => {
   const { id } = req.params.id;
@@ -156,6 +208,23 @@ router.delete('/api/contacts/:id', async (req, res) => {
       res.status(204).send(); //Nothing to send back
     } else {
       res.status(404).send('Feedback Not Found');
+    }
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+// DELETE a user
+router.delete('/api/user/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deletedUser= await UserModel.findByIdAndDelete(id);
+
+    if (deletedUser) {
+      res.status(204).send(); //Nothing to send back
+    } else {
+      res.status(404).send('User Not Found');
     }
   } catch (error) {
     res.status(500).send(error);
