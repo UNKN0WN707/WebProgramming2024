@@ -30,7 +30,6 @@ const Home = () => {
         <div>
             <Hero />
             <Form changeValue={changeValue}/>
-            <Results />
             <Footer />
         </div>  
     );

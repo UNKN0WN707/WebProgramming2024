@@ -8,7 +8,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      EXPRESS_URL: "http://localhost:3000"
+      EXPRESS_URL: "http://localhost:3001"
     depends_on:
       - express
       - mongo

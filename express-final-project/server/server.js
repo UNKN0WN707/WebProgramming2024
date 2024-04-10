@@ -15,8 +15,14 @@ const mongoose = require('mongoose');
 
 const app = express();
 const router = express.Router();
-app.use(require('cors')())
 const port = 8000;
+
+// CORS configuration
+const corsOptions = {
+  origin: process.env.REACT_URI, // Allow only requests from localhost:3000
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+app.use(cors(corsOptions))
 
 // Connect to the MongoDB database
 mongoose.connect('mongodb://localhost:27017/animes')

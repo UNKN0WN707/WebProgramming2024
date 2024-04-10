@@ -67,22 +67,24 @@ const Form = () => {
                         entered will get stored in our database.
                     </p>
                 </div>
-
+                <div>
                     <AddAnimeForm onAddAnime={handleAddAnime} />
-                {animes.map(anime => (
-                    <div key={anime._id}>
-                    <p>{anime.title} - {anime.genre}</p>
-                    <button onClick={() => setEditingAnime(anime)}>Edit</button>
-                    <button onClick={() => handleDeleteAnime(anime._id)}>Delete</button>
-                    </div>
-                ))}
-                {editingAnime && (
+                      {animes.map(anime => (
+                          <div key={anime._id}>
+                            <table>
+                                <tr className="titles"><th id="title">Anime</th><th>Genre</th><th>Rating</th><th id="action">Action</th></tr>
+                                <tr><td id="title">{anime.title}</td><td>{anime.genre}</td><td>9</td><td><button onClick={() => setEditingAnime(anime)}>Edit</button> <button onClick={() => handleDeleteAnime(anime._id)}>Delete</button></td></tr>
+                            </table>
+                          </div>
+                      ))}
+                      {editingAnime && (
                     <EditAnimeForm
-                    anime={editingAnime}
-                    onUpdateAnime={handleUpdateAnime}
-                    />
-                )} 
-                
+                        anime={editingAnime}
+                        onUpdateAnime={handleUpdateAnime}
+                        />
+                    )} 
+                </div>
+
             </div>
         </div>
     );
