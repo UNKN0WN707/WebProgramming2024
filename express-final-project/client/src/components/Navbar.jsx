@@ -21,14 +21,17 @@ const Navbar = () => {
 
             <ul className="navButtons">
                 <li>
-                    <Link to="/">HOME</Link>
+                    <Link to="/">Home</Link>
                 </li>
                 <li>
-                    <Link to="/about">ABOUT</Link>
+                    <Link to="/about">About</Link>
                 </li>
                 <li>
-                    <Link to="/contact">CONTACT</Link>
-                </li>        
+                    <Link to="/contact">Contact</Link>
+                </li>  
+                <li>
+                    <Link to="/create-user">Create Account</Link>
+                </li>      
             </ul>
         </nav>
     );
