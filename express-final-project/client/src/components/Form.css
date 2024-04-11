@@ -55,6 +55,23 @@
    background-color: #ce7b7b;
  }
 
+ .result {
+   margin-top: 30px;
+ }
+
+.btn {
+   height: 40px;
+   border-radius: 6px;
+   background-color: #9678b6;
+   font-size: 15px;
+   position: relative;
+   
+}
+
+.btn:hover {
+   background-color: #b19cd9;
+}
+
 
  
  

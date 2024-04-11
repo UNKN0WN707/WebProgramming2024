@@ -29,10 +29,13 @@ const Form = () => {
     }, []);
     
   
+    // Handle Add
     const handleAddAnime = (newAnime) => {
       setAnimes(currentAnimes => [...currentAnimes, newAnime]);
     };
   
+
+    // Handle Edit
     const handleUpdateAnime = (updatedAnime) => {
       setAnimes(currentAnimes =>
         currentAnimes.map(anime => anime._id === updatedAnime._id ? updatedAnime : anime)
@@ -40,6 +43,7 @@ const Form = () => {
       setEditingAnime(null); // Reset the editing state after update
     };
   
+    // Handle delete
     const handleDeleteAnime = (id) => {
       fetch(`/api/animes/${id}`, {
         method: 'DELETE',
@@ -71,9 +75,9 @@ const Form = () => {
                     <AddAnimeForm onAddAnime={handleAddAnime} />
                       {animes.map(anime => (
                           <div key={anime._id}>
-                            <table>
+                            <table class="result">
                                 <tr className="titles"><th id="title">Anime</th><th>Genre</th><th>Rating</th><th id="action">Action</th></tr>
-                                <tr><td id="title">{anime.title}</td><td>{anime.genre}</td><td>9</td><td><button onClick={() => setEditingAnime(anime)}>Edit</button> <button onClick={() => handleDeleteAnime(anime._id)}>Delete</button></td></tr>
+                                <tr><td id="title">{anime.title}</td><td>{anime.genre}</td><td>9</td><td><button class="btn" onClick={() => setEditingAnime(anime)}>Edit</button> <button class="btn" onClick={() => handleDeleteAnime(anime._id)}>Delete</button></td></tr>
                             </table>
                           </div>
                       ))}
