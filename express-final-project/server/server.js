@@ -179,7 +179,7 @@ router.delete('/api/animes/:id', async (req, res) => {
 });
 
 app.use('/', router);
-
+app.use(cors());
 app.listen(port, () => {
   console.log(`Anime Collection Tracker API running at http://localhost:${port}`);
 });
