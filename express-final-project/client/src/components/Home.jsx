@@ -16,6 +16,7 @@ import AddAnimeForm from './AddAnimeForm';
 import EditAnimeForm from './EditAnimeForm';
 
 
+
 const Home = () => {
     
 
@@ -25,7 +26,8 @@ const Home = () => {
         const results = "Score: " + slider.value;
 
         value.textContent = results
-    }     
+    }    
+     
 
     const [animes, setAnimes] = useState([]);
     const [editingAnime, setEditingAnime] = useState(null); // State to track the anime being edited
@@ -71,6 +73,7 @@ const Home = () => {
         <div>
             <Hero />
             <Form changeValue={changeValue}/>
+<<<<<<< HEAD
     
             <AddAnimeForm onAddAnime={handleAddAnime} />
             {animes.map(anime => (
@@ -88,6 +91,8 @@ const Home = () => {
             )} 
 
             <Results />
+=======
+>>>>>>> Sreypich
             <Footer />
         </div>  
     );

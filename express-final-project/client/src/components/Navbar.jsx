@@ -21,6 +21,7 @@ const Navbar = () => {
 
             <ul className="navButtons">
                 <li>
+<<<<<<< HEAD
                     <Link to="/">HOME</Link>
                 </li>
                 <li>
@@ -29,6 +30,19 @@ const Navbar = () => {
                 <li>
                     <Link to="/contact">CONTACT</Link>
                 </li>        
+=======
+                    <Link to="/">Home</Link>
+                </li>
+                <li>
+                    <Link to="/about">About</Link>
+                </li>
+                <li>
+                    <Link to="/contact">Contact</Link>
+                </li>  
+                <li>
+                    <Link to="/create-user">Create Account</Link>
+                </li>      
+>>>>>>> Sreypich
             </ul>
         </nav>
     );

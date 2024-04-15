@@ -7,7 +7,11 @@ function EditAnimeForm({ anime, onAnimeUpdate }) {
   const handleSubmit = (event) => {
     event.preventDefault();
 
+<<<<<<< HEAD
     fetch(`/api/animes/${anime.id}`, { // Make sure to use backticks here
+=======
+    fetch(`/api/animes/${anime._id}`, {
+>>>>>>> Sreypich
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ title, genre }),
@@ -32,13 +36,21 @@ function EditAnimeForm({ anime, onAnimeUpdate }) {
         <div>
           <label>
             Title:
-            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
+            <input 
+              type="text" 
+              value={title} 
+              onChange={(e) => setTitle(e.target.value)} 
+            />
           </label>
         </div>
         <div>
           <label>
             Genre:
-            <input type="text" value={genre} onChange={(e) => setGenre(e.target.value)} />
+            <input 
+              type="text" 
+              value={genre} 
+              onChange={(e) => setGenre(e.target.value)} 
+            />
           </label>
         </div>
         <button type="submit">Update Anime</button>
