@@ -84,7 +84,7 @@ const Form = () => {
                       {editingAnime && (
                     <EditAnimeForm
                         anime={editingAnime}
-                        onUpdateAnime={handleUpdateAnime}
+                        onAnimeUpdate={handleUpdateAnime}
                         />
                     )} 
                 </div>

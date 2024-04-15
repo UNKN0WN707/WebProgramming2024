@@ -15,7 +15,5 @@ COPY . .
 # Expose port 3001
 EXPOSE 3001
 
-# Define environment variables
-
 # Define the command to run the Express app
 CMD ["npm", "start"]

@@ -10,7 +10,7 @@ function AddAnimeForm({ onAddAnime }) {
     const newAnime = { title, genre };
 
     // Send POST request to server endpoint
-    fetch('/api/animes', {
+    fetch('http://localhost:8081/api/animes', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
