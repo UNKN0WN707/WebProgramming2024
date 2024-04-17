@@ -51,6 +51,7 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
 });
 
+/*
 // define any additional methods or hooks for the user schema, such as password hashing
 userSchema.pre('save', async function(next) {
   const user = this;
@@ -63,6 +64,7 @@ userSchema.pre('save', async function(next) {
     return next(error);
   }
 });
+*/
 
 const UserModel = mongoose.model('User', userSchema);
 
@@ -278,6 +280,7 @@ router.delete('/api/animes/:id', async (req, res) => {
 });
 
 
+/*
 // POST - Create a new user
 router.post('/signup', async (req, res) => {
   const { username, email, password } = req.body;
@@ -300,6 +303,30 @@ router.post('/signup', async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
+*/
+
+// POST - Create a new user without hashing
+router.post('/signup', async (req, res) => {
+  const { username, email, password } = req.body;
+
+  try {
+    // Check if user with given email already exists
+    const existingUser = await UserModel.findOne({ email });
+
+    if (existingUser) {
+      return res.status(400).json({ message: 'User already exists' });
+    }
+
+    // Create a new user without hashing the password
+    const newUser = new UserModel({ username, email, password });
+    await newUser.save();
+
+    res.status(201).json({ message: 'User created successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 
 // POST - Signin
 router.post('/signin', async (req, res) => {
@@ -313,9 +340,16 @@ router.post('/signin', async (req, res) => {
       return res.status(400).json({ message: 'Login failed! User not found' });
     }
 
+    /*
     // Compare the hashed password
     const isPasswordMatch = await bcrypt.compare(password, user.password);
     if (!isPasswordMatch) {
+      return res.status(400).json({ message: 'Login failed! Password not a match' });
+    }
+    */
+   
+    // Compare the plaintext password
+    if (user.password !== password) {
       return res.status(400).json({ message: 'Login failed! Password not a match' });
     }
 

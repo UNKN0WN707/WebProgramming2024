@@ -13,6 +13,7 @@ const CreateUserForm = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const [showSignin, setShowSignin] = useState(false);
+  const [userDisplayName, setUserDisplayName] = useState('');
 
   const handleSignup = () => {
     setShowSignup(true);
@@ -22,9 +23,10 @@ const CreateUserForm = () => {
     setShowSignin(true);
   };
 
-  const handleAuthenticated = () => {
+  const handleAuthenticated = (username) => {
     setIsAuthenticated(true);
-    setMessage('Signup successful! Welcome!');
+    setUserDisplayName(username); // Set user's display name
+    setMessage('Signin successful! Welcome!');
   };
 
   const handleSubmit = async (e) => {
@@ -46,7 +48,7 @@ const CreateUserForm = () => {
         setUsername('');
         setEmail('');
         setPassword('');
-        handleAuthenticated(); // Set authentication state to true
+        handleAuthenticated(data.username); // Pass username to handleAuthenticated
       } else {
         setMessage(data.message);
       }
@@ -59,11 +61,16 @@ const CreateUserForm = () => {
     <div>
       <Hero />
       <div className="container">
+      {isAuthenticated && (
+        <div>
+          <p>Welcome, {userDisplayName}!</p> {/* Show user's name */}
+        </div>
+      )}
       {!isAuthenticated && (
         <div>
           <h2>New User</h2>
           <button onClick={handleSignup}>Sign Up</button>
-          <h2>Exisiting User</h2>
+          <h2>Existing User</h2>
           <button onClick={handleSignin}>Sign In</button>
         </div>
       )}

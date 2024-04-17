@@ -6,7 +6,8 @@ const SigninForm = ({ onSignin }) => {
     email: '',
     password: ''
   });
-  const [message, setMessage] = useState(''); // State to hold error messages
+  const [showPassword, setShowPassword] = useState(false); // track password
+  const [message, setMessage] = useState(''); 
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -24,8 +25,9 @@ const SigninForm = ({ onSignin }) => {
         body: JSON.stringify(formData),
       });
       const data = await response.json();
+      
       if (response.ok) {
-        onSignin(); // Notify parent component upon successful signin
+        onSignin(data.user.username); 
       } else {
         throw new Error(data.message || 'Failed to sign in');
       }
@@ -33,6 +35,10 @@ const SigninForm = ({ onSignin }) => {
       setMessage(error.message);
       console.error('Error:', error);
     }
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -49,16 +55,25 @@ const SigninForm = ({ onSignin }) => {
       </label>
       <label>
         Password:
-        <input
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
+        <div className="password-input">
+          <input
+            type={showPassword ? "text" : "password"}
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+          <button type="button" onClick={togglePasswordVisibility}>
+            {showPassword ? "Hide" : "Show"}
+          </button>
+        </div>
       </label>
       <button type="submit">Sign In</button>
-      {message && <div className="error-message">{message}</div>} {/* Displaying error message */}
+      {message && <div className="error-message">
+                <span className="error-icon" style={{ paddingRight: "10px" }}>⚠️</span>
+                {message}
+            </div>}
+
     </form>
   );
 };
