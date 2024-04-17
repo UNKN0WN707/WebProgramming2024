@@ -2,30 +2,51 @@ import React, { useState } from 'react';
 import './CreateUser.css';
 import Hero from './Hero';
 import Footer from './Footer';
+import SignupForm from './SignupForm';
+import SigninForm from './SigninForm';
 
 const CreateUserForm = () => {
-  const [name, setName] = useState('');
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showSignup, setShowSignup] = useState(false);
+  const [showSignin, setShowSignin] = useState(false);
+
+  const handleSignup = () => {
+    setShowSignup(true);
+  };
+
+  const handleSignin = () => {
+    setShowSignin(true);
+  };
+
+  const handleAuthenticated = () => {
+    setIsAuthenticated(true);
+    setMessage('Signup successful! Welcome!');
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await fetch('/api/users', {
+      const response = await fetch('/api/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, password }),
+        body: JSON.stringify({ username, email, password }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
         setMessage(data.message);
-        setName('');
+        setUsername('');
+        setEmail('');
         setPassword('');
+        handleAuthenticated(); // Set authentication state to true
       } else {
         setMessage(data.message);
       }
@@ -38,17 +59,20 @@ const CreateUserForm = () => {
     <div className="container">
       <Hero />
       <h2>Create User</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Name:</label>
-          <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+      {!isAuthenticated && (
+        <div>
+          <p>You need to sign up or sign in to create a new user.</p>
+          <button onClick={handleSignup}>Sign Up</button>
+          <button onClick={handleSignin}>Sign In</button>
         </div>
-        <div className="form-group">
-          <label>Password:</label>
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        </div>
-        <button type="submit">Create User</button>
-      </form>
+      )}
+      {showSignup && <SignupForm onSignup={handleAuthenticated} />}
+      {showSignin && <SigninForm onSignin={handleAuthenticated} />}
+      {isAuthenticated && (
+        <form onSubmit={handleSubmit}>
+          {/* Form inputs and submit button here */}
+        </form>
+      )}
       {message && <p className="message">{message}</p>}
       <Footer />
     </div>
