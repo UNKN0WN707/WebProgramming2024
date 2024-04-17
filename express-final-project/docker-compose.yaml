@@ -1,0 +1,17 @@
+version: '3'
+services:
+  react:
+    container_name: react-container
+    build: ./client
+    image: react-image
+    restart: always
+    ports:
+      - "3000:3000"
+    
+  express:
+    container_name: express-container
+    build: ./server
+    image: express-image
+    restart: always
+    ports:
+      - "8081:8080"

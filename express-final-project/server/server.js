@@ -10,13 +10,18 @@
 // Running database ("/c/Program Files/MongoDB/Server/7.0/bin/mongod.exe" --dbpath="C:\Web Dev\Web Programming\data\animes")
 
 const express = require('express');
+const cors = require('cors');
 const mongoose = require('mongoose');
+
 const app = express();
 const router = express.Router();
-const port = 8000;
+const port = 8080;
+
+app.use(cors());
+app.use(express.json()); 
 
 // Connect to the MongoDB database
-mongoose.connect('mongodb://localhost:27017/animes')
+mongoose.connect('mongodb://host.docker.internal:27017/animes')
         .then(() => console.log('Connected to database'))
         .catch((err) => console.log(err))
 
@@ -99,10 +104,11 @@ router.post('/api/animes', async (req, res) => {
   });
 
   try {
-    const newAnime = await anime.save()
+    const newAnime = await anime.save();
     res.status(201).send(anime);
   } catch (error) {
-    res.status(500).send(error);
+    console.error('Failed to save anime:', error); 
+    res.status(500).send({ message: "Failed to add anime", error: error.message });
   }
 });
 
@@ -126,21 +132,23 @@ router.put('/api/contacts/:id', async (req, res) => {
 
 // PUT update an anime
 router.put('/api/animes/:id', async (req, res) => {
-  const { id } = req.params.id;
+  const { id } = req.params; 
   const { title, genre } = req.body;
 
   try {
-    const updatedAnime = await AnimeModel.findByIdAndUpdate(id, { title, genre });
+    // Ensuring the updated document is returned by setting { new: true }
+    const updatedAnime = await AnimeModel.findByIdAndUpdate(id, { title, genre }, { new: true });
 
     if (updatedAnime) {
-      res.json(updatedAnime);
+      res.json(updatedAnime); 
     } else {
       res.status(404).send('Anime Not Found');
     }
   } catch (error) {
-    res.status(500).send(error);
+    res.status(500).send({ message: "Failed to update anime", error: error.message });
   }
 });
+
 
 // DELETE a piece of feedback
 router.delete('/api/contacts/:id', async (req, res) => {
@@ -177,7 +185,6 @@ router.delete('/api/animes/:id', async (req, res) => {
 });
 
 app.use('/', router);
-
 app.listen(port, () => {
   console.log(`Anime Collection Tracker API running at http://localhost:${port}`);
 });
