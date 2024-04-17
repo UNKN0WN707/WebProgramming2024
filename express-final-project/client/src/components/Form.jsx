@@ -19,7 +19,7 @@ const Form = () => {
   
     useEffect(() => {
       console.log("Fetching anime data...");
-      fetch('/api/animes')
+      fetch('http://localhost:8081/api/animes')
         .then(response => response.json())
         .then(data => {
           console.log("Fetched anime data:", data);
@@ -45,7 +45,7 @@ const Form = () => {
   
     // Handle delete
     const handleDeleteAnime = (id) => {
-      fetch(`/api/animes/${id}`, {
+      fetch(`http://localhost:8081/api/animes/${id}`, {
         method: 'DELETE',
       })
       .then(response => {

@@ -1,4 +1,4 @@
-/**
+/*
  *   Programmers: Andy Tran, Sreypich Heng
  *   Rowan University
  *   Course: Web Programming CS04305
@@ -11,6 +11,7 @@
 
 const express = require('express');
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 
 const app = express();
@@ -19,6 +20,9 @@ const port = 8080;
 
 app.use(cors());
 app.use(express.json()); 
+
+// Secret key used for the JWT token
+secretKey = require('crypto').randomBytes(32).toString('hex');
 
 // Connect to the MongoDB database
 mongoose.connect('mongodb://host.docker.internal:27017/animes')
@@ -42,13 +46,32 @@ const contactSchema = new mongoose.Schema({
 
 const ContactModel = mongoose.model('Contact', contactSchema);
 
-app.use(express.json());
+// User Schema and Model
+const userSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  password: { type: String, required: true }
+});
+
+const UserModel = mongoose.model('User', userSchema);
 
 // Mock data for anime collection
 let animes = [
   { id: 1, title: "Attack on Titan", genre: "Action, Dark Fantasy, Post-apocalyptic" },
   { id: 2, title: "My Hero Academia", genre: "Superhero, Action" }
 ];
+
+// Login User
+app.post('/login', async (req, res) => {
+  const { name, password } = req.body;
+  const user = await UserModel.findOne({ name });
+
+  if (password && password === user.password) {
+    const token = jwt.sign({ name }, secretKey, { expiresIn: '1h' });
+    res.json({token});
+  } else {
+    res.status(401).send('Invalid username or password');
+  }
+})
 
 // GET all the feedback from Contact Form
 router.get('/api/contacts', async (req, res) => {
@@ -61,7 +84,7 @@ router.get('/api/contacts', async (req, res) => {
 });
 
 // GET all animes
-app.get('/api/animes', async (req, res) => {
+router.get('/api/animes', async (req, res) => {
   try {
     const storedAnimes = await AnimeModel.find({});
     res.json(storedAnimes);
@@ -70,8 +93,18 @@ app.get('/api/animes', async (req, res) => {
   }
 });
 
+// Get a user by name
+router.get('/api/users/:name', async (req, res) => {
+  const user = await UserModel.find(a => a.name === req.params.name);
+
+  if (!user) {
+    return res.status(404).send('User not found');
+  }
+  res.json(user);
+});
+
 // GET a single anime by id
-app.get('/api/animes/:id', async (req, res) => {
+router.get('/api/animes/:id', async (req, res) => {
   const anime = await AnimeModel.find(a => a.id === parseInt(req.params.id));
   if (!anime) {
     return res.status(404).send('Anime not found');
@@ -95,6 +128,22 @@ router.post('/api/contacts', async (req, res) => {
   }
 });
 
+// POST a new user
+router.post('/api/users', async (req, res) => {
+  const { name, password } = req.body;
+
+  const user = new UserModel({
+    name, password
+  });
+
+  try {
+    const newUser = await user.save()
+    res.status(201).send(newUser);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 // POST a new anime
 router.post('/api/animes', async (req, res) => {
   const { title, genre } = req.body;
@@ -104,11 +153,10 @@ router.post('/api/animes', async (req, res) => {
   });
 
   try {
-    const newAnime = await anime.save();
+    const newAnime = await anime.save()
     res.status(201).send(anime);
   } catch (error) {
-    console.error('Failed to save anime:', error); 
-    res.status(500).send({ message: "Failed to add anime", error: error.message });
+    res.status(500).send(error);
   }
 });
 
@@ -130,25 +178,41 @@ router.put('/api/contacts/:id', async (req, res) => {
   }
 });
 
+// PUT update a user
+router.put('/api/user/:id', async (req, res) => {
+  const { id } = req.params.id;
+  const { password } = req.body;
+
+  try {
+    const updatedUser = await UserModel.findByIdAndUpdate(id, { password });
+
+    if (updatedUser) {
+      res.json(updatedUser);
+    } else {
+      res.status(404).send('User Not Found');
+    }
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 // PUT update an anime
 router.put('/api/animes/:id', async (req, res) => {
-  const { id } = req.params; 
+  const { id } = req.params.id;
   const { title, genre } = req.body;
 
   try {
-    // Ensuring the updated document is returned by setting { new: true }
-    const updatedAnime = await AnimeModel.findByIdAndUpdate(id, { title, genre }, { new: true });
+    const updatedAnime = await AnimeModel.findByIdAndUpdate(id, { title, genre });
 
     if (updatedAnime) {
-      res.json(updatedAnime); 
+      res.json(updatedAnime);
     } else {
       res.status(404).send('Anime Not Found');
     }
   } catch (error) {
-    res.status(500).send({ message: "Failed to update anime", error: error.message });
+    res.status(500).send(error);
   }
 });
-
 
 // DELETE a piece of feedback
 router.delete('/api/contacts/:id', async (req, res) => {
@@ -161,6 +225,23 @@ router.delete('/api/contacts/:id', async (req, res) => {
       res.status(204).send(); //Nothing to send back
     } else {
       res.status(404).send('Feedback Not Found');
+    }
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+// DELETE a user
+router.delete('/api/user/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deletedUser= await UserModel.findByIdAndDelete(id);
+
+    if (deletedUser) {
+      res.status(204).send(); //Nothing to send back
+    } else {
+      res.status(404).send('User Not Found');
     }
   } catch (error) {
     res.status(500).send(error);
@@ -185,6 +266,7 @@ router.delete('/api/animes/:id', async (req, res) => {
 });
 
 app.use('/', router);
+
 app.listen(port, () => {
   console.log(`Anime Collection Tracker API running at http://localhost:${port}`);
 });
