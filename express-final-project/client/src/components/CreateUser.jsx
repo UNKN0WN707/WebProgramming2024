@@ -56,13 +56,14 @@ const CreateUserForm = () => {
   };
 
   return (
-    <div className="container">
+    <div>
       <Hero />
-      <h2>Create User</h2>
+      <div className="container">
       {!isAuthenticated && (
         <div>
-          <p>You need to sign up or sign in to create a new user.</p>
+          <h2>New User</h2>
           <button onClick={handleSignup}>Sign Up</button>
+          <h2>Exisiting User</h2>
           <button onClick={handleSignin}>Sign In</button>
         </div>
       )}
@@ -70,10 +71,11 @@ const CreateUserForm = () => {
       {showSignin && <SigninForm onSignin={handleAuthenticated} />}
       {isAuthenticated && (
         <form onSubmit={handleSubmit}>
-          {/* Form inputs and submit button here */}
+          {}
         </form>
       )}
       {message && <p className="message">{message}</p>}
+      </div>
       <Footer />
     </div>
   );

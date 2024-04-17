@@ -1,13 +1,4 @@
-/**
- *   Programmers: Andy Tran, Sreypich Heng
- *   Rowan University
- *   Course: Web Programming CS04305
- *   Instructor: Marquise Pullen
- *
- *   Description: stylesheet for Form component.
- */
-
- .foreground {
+.foreground {
     width: 1024px;
     justify-content: center;
     margin: auto;
@@ -17,6 +8,7 @@
     position: relative;
     bottom: 40px;
     box-shadow: 2px 3px 3px;
+    width: 100vh;
  }
 
  .howTo {
@@ -72,6 +64,11 @@
    background-color: #b19cd9;
 }
 
-
- 
- 
+.error-message {
+   color: red;           
+   background-color: #FFD2D2;
+   padding: 10px; 
+   margin: 10px 0;       
+   border-radius: 5px;    
+   border: 1px solid red; 
+}
