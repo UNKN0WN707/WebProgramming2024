@@ -27,12 +27,16 @@ const SigninForm = ({ onSignin }) => {
       const data = await response.json();
       
       if (response.ok) {
-        onSignin(data.user.username); 
+        onSignin(data.user.username);
       } else {
         throw new Error(data.message || 'Failed to sign in');
       }
+
+      localStorage.setItem('user', data.user.token);
+      console.log(localStorage);
+
     } catch (error) {
-      setMessage(error.message);
+      //setMessage(error.message);
       console.error('Error:', error);
     }
   };
@@ -40,6 +44,8 @@ const SigninForm = ({ onSignin }) => {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+
+  
 
   return (
     <form onSubmit={handleSubmit}>

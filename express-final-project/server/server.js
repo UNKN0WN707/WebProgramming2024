@@ -11,6 +11,7 @@
 
 const express = require('express');
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
@@ -20,6 +21,9 @@ const port = 8080;
 
 app.use(cors());
 app.use(express.json()); 
+
+// Secret key used for the JWT token
+secretKey = require('crypto').randomBytes(32).toString('hex');
 
 // Connect to the MongoDB database
 mongoose.connect('mongodb://host.docker.internal:27017/animes')
@@ -340,25 +344,22 @@ router.post('/signin', async (req, res) => {
       return res.status(400).json({ message: 'Login failed! User not found' });
     }
 
-    /*
-    // Compare the hashed password
-    const isPasswordMatch = await bcrypt.compare(password, user.password);
-    if (!isPasswordMatch) {
-      return res.status(400).json({ message: 'Login failed! Password not a match' });
-    }
-    */
-   
     // Compare the plaintext password
     if (user.password !== password) {
       return res.status(400).json({ message: 'Login failed! Password not a match' });
+
     }
+
+    const token = jwt.sign({ username: user.username }, secretKey, { expiresIn: '1h' });
+    console.log(token);
 
     // Return user data (excluding the password)
     res.status(200).json({
       message: 'Login successful',
       user: {
         username: user.username,
-        email: user.email
+        email: user.email,
+        token: token
       }
     });
   } catch (error) {
