@@ -1,0 +1,83 @@
+/**
+ *   Programmers: Andy Tran, Sreypich Heng
+ *   Rowan University
+ *   Course: Web Programming CS04305
+ *   Instructor: Marquise Pullen
+ *
+ *   Description: this is the style sheet for sign in and up form
+ */
+
+.foreground {
+    width: 1024px;
+    justify-content: center;
+    margin: auto;
+    background-color: white;
+    padding: 40px;
+    border-top: solid 9px #f18f8f;
+    position: relative;
+    bottom: 40px;
+    box-shadow: 2px 3px 3px;
+    width: 100vh;
+ }
+
+ .howTo {
+    height: auto;
+    justify-content: center;
+    padding-bottom: 20px;
+ }
+
+ form p {
+    font-size: 30px;
+    font-weight: bold;
+    color: #f18f8f;
+    margin-top: 10px;
+ }
+
+ form {
+    width: 400px;
+    border: 5px solid #e4e1e1;
+    padding: 40px;
+    box-shadow: 4px 3px 3px #f18f8f;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+ }
+
+ .button {
+   width: 200px;
+   height: 40px;
+   border-radius: 10px;
+   background-color: #f18f8f;
+   font-size: 15px;
+   position: relative;
+ }
+
+ .button:hover {
+   background-color: #ce7b7b;
+ }
+
+ .result {
+   margin-top: 30px;
+ }
+
+.btn {
+   height: 40px;
+   border-radius: 6px;
+   background-color: #9678b6;
+   font-size: 15px;
+   position: relative;
+   
+}
+
+.btn:hover {
+   background-color: #b19cd9;
+}
+
+.error-message {
+   color: red;           
+   background-color: #FFD2D2;
+   padding: 10px; 
+   margin: 10px 0;       
+   border-radius: 5px;    
+   border: 1px solid red; 
+}
