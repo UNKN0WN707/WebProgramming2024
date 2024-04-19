@@ -1,3 +1,13 @@
+/**
+ *   Programmers: Andy Tran, Sreypich Heng
+ *   Rowan University
+ *   Course: Web Programming CS04305
+ *   Instructor: Marquise Pullen
+ *
+ *   Description: this component allow users to create new account
+ */
+
+
 import React, { useState } from 'react';
 import './CreateUser.css';
 import Hero from './Hero';

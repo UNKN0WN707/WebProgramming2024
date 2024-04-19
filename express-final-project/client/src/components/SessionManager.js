@@ -1,3 +1,12 @@
+/**
+ *   Programmers: Andy Tran, Sreypich Heng
+ *   Rowan University
+ *   Course: Web Programming CS04305
+ *   Instructor: Marquise Pullen
+ *
+ *   Description: This file managed the session 
+ */
+
 import { useState } from 'react';
 
 function useSessionStorage(key, initialValue) {

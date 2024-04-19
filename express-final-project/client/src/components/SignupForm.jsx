@@ -1,3 +1,12 @@
+/**
+ *   Programmers: Andy Tran, Sreypich Heng
+ *   Rowan University
+ *   Course: Web Programming CS04305
+ *   Instructor: Marquise Pullen
+ *
+ *   Description: This form allows you to sign up an account
+ */
+
 import React, { useState } from 'react';
 import './Signinandup.css';
 

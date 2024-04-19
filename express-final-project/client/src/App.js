@@ -1,3 +1,12 @@
+/**
+ *   Programmers: Andy Tran, Sreypich Heng
+ *   Rowan University
+ *   Course: Web Programming CS04305
+ *   Instructor: Marquise Pullen
+ *
+ *   Description: This file render different pages
+ */
+
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Home from './components/Home';

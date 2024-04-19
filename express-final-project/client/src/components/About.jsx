@@ -4,7 +4,7 @@
  *   Course: Web Programming CS04305
  *   Instructor: Marquise Pullen
  *
- *   Description: stores and renders the other components.
+ *   Description: this is a component shows the about page
  */
 
 import React from 'react';

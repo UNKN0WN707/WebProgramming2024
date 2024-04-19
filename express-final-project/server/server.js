@@ -55,28 +55,7 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
 });
 
-/*
-// define any additional methods or hooks for the user schema, such as password hashing
-userSchema.pre('save', async function(next) {
-  const user = this;
-  if (!user.isModified('password')) return next();
-  try {
-    const hashedPassword = await bcrypt.hash(user.password, 10);
-    user.password = hashedPassword;
-    next();
-  } catch (error) {
-    return next(error);
-  }
-});
-*/
-
 const UserModel = mongoose.model('User', userSchema);
-
-// Mock data for anime collection
-let animes = [
-  { id: 1, title: "Attack on Titan", genre: "Action, Dark Fantasy, Post-apocalyptic" },
-  { id: 2, title: "My Hero Academia", genre: "Superhero, Action" }
-];
 
 // GET all the feedback from Contact Form
 router.get('/api/contacts', async (req, res) => {
@@ -166,7 +145,7 @@ router.post('/api/users', async (req, res) => {
   }
 });
 
-// GET - Get all users
+// GET all users
 router.get('/api/users', async (req, res) => {
   try {
       const users = await UserModel.find({});
@@ -194,7 +173,7 @@ router.put('/api/users/:id', async (req, res) => {
   }
 });
 
-// DELETE - Delete user by ID
+// DELETE user by ID
 router.delete('/api/users/:id', async (req, res) => {
   const { id } = req.params;
 
@@ -284,32 +263,7 @@ router.delete('/api/animes/:id', async (req, res) => {
 });
 
 
-/*
-// POST - Create a new user
-router.post('/signup', async (req, res) => {
-  const { username, email, password } = req.body;
-
-  try {
-    // Check if user with given email already exists
-    const existingUser = await UserModel.findOne({ email });
-
-    if (existingUser) {
-      return res.status(400).json({ message: 'User already exists' });
-    }
-
-    // Hash the password and create a new user
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new UserModel({ username, email, password: hashedPassword });
-    await newUser.save();
-
-    res.status(201).json({ message: 'User created successfully' });
-  } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
-  }
-});
-*/
-
-// POST - Create a new user without hashing
+// POST - Signup
 router.post('/signup', async (req, res) => {
   const { username, email, password } = req.body;
 

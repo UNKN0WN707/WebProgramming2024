@@ -1,3 +1,12 @@
+/**
+ *   Programmers: Andy Tran, Sreypich Heng
+ *   Rowan University
+ *   Course: Web Programming CS04305
+ *   Instructor: Marquise Pullen
+ *
+ *   Description: This form allows you to sign into an account
+ */
+
 import React, { useState } from 'react';
 import './Signinandup.css';
 
@@ -32,17 +41,17 @@ const SigninForm = ({ onSignin }) => {
         throw new Error(data.message || 'Failed to sign in');
       }
 
-      localStorage.setItem('user', data.user.token);
-      console.log(localStorage);
+      localStorage.setItem('user', data.user.token); // store the JWT token into local storage
+      console.log(localStorage); 
 
     } catch (error) {
-      //setMessage(error.message);
+      setMessage(error.message);
       console.error('Error:', error);
     }
   };
 
   const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
+    setShowPassword(!showPassword); // show/hide password
   };
 
   
