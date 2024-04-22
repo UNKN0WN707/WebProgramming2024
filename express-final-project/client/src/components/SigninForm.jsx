@@ -42,6 +42,8 @@ const SigninForm = ({ onSignin }) => {
       }
 
       localStorage.setItem('user', data.user.token); // store the JWT token into local storage
+
+      //localStorage.setItem('user', JSON.stringify(data.user)); // Store the full user object, including the token
       console.log(localStorage); 
 
     } catch (error) {
