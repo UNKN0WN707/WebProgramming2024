@@ -33,7 +33,7 @@ mongoose.connect('mongodb://host.docker.internal:27017/animes')
 
 // Anime Schema and Model
 const animeSchema = new mongoose.Schema({
-  title: { type: String, required: true, unique: true },
+  title: { type: String, required: true, unique: true }, // Unique title
   genre: { type: String, required: true }
 });
 
@@ -106,18 +106,26 @@ router.post('/api/contacts', async (req, res) => {
 router.post('/api/animes', async (req, res) => {
   const { title, genre } = req.body;
 
-  const anime = new AnimeModel({
-    title, genre
-  });
-
   try {
-    const newAnime = await anime.save();
-    res.status(201).send(anime);
+    // Check if an anime with the same title already exists
+    const existingAnime = await AnimeModel.findOne({ title });
+
+    if (existingAnime) {
+      // If an anime with the same title exists, return an error
+      return res.status(400).json({ message: 'An anime with the same title already exists.' });
+    }
+
+    // If the anime title is unique, save the new anime
+    const newAnime = new AnimeModel({ title, genre });
+    await newAnime.save();
+
+    res.status(201).json(newAnime);
   } catch (error) {
     console.error('Failed to save anime:', error); 
-    res.status(500).send({ message: "Failed to add anime", error: error.message });
+    res.status(500).json({ message: "Failed to add anime", error: error.message });
   }
 });
+
 
 // POST - Create a new user
 router.post('/api/users', async (req, res) => {
@@ -210,23 +218,21 @@ router.put('/api/contacts/:id', async (req, res) => {
 
 // PUT update an anime
 router.put('/api/animes/:id', async (req, res) => {
-  const { id } = req.params; 
+  const { id } = req.params.id;
   const { title, genre } = req.body;
 
   try {
-    // Ensuring the updated document is returned by setting { new: true }
-    const updatedAnime = await AnimeModel.findByIdAndUpdate(id, { title, genre }, { new: true });
+    const updatedAnime = await AnimeModel.findByIdAndUpdate(id, { title, genre });
 
     if (updatedAnime) {
-      res.json(updatedAnime); 
+      res.json(updatedAnime);
     } else {
       res.status(404).send('Anime Not Found');
     }
   } catch (error) {
-    res.status(500).send({ message: "Failed to update anime", error: error.message });
+    res.status(500).send(error);
   }
 });
-
 
 // DELETE a piece of feedback
 router.delete('/api/contacts/:id', async (req, res) => {

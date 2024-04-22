@@ -27,10 +27,12 @@ const CreateUserForm = () => {
 
   const handleSignup = () => {
     setShowSignup(true);
+    setShowSignin(false); // Close signin section
   };
 
   const handleSignin = () => {
     setShowSignin(true);
+    setShowSignup(false); // Close signup section
   };
 
   const handleAuthenticated = (username) => {
@@ -88,7 +90,7 @@ const CreateUserForm = () => {
       {showSignin && <SigninForm onSignin={handleAuthenticated} />}
       {isAuthenticated && (
         <form onSubmit={handleSubmit}>
-          {}
+          {/* Add form elements for authenticated user */}
         </form>
       )}
       {message && <p className="message">{message}</p>}

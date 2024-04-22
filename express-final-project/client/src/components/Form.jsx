@@ -31,6 +31,13 @@ const Form = () => {
   
     // Handle Add
     const handleAddAnime = (newAnime) => {
+        // Check if an anime with the same title already exists
+      const existingAnime = animes.find(anime => anime.title === newAnime.title);
+      if (existingAnime) {
+        // If an anime with the same title exists, show a message and return
+        console.error('An anime with the same title already exists. Please enter a different name.');
+        return;
+      }
       setAnimes(currentAnimes => [...currentAnimes, newAnime]);
     };
   
