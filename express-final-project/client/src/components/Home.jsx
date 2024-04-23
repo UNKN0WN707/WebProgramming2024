@@ -7,10 +7,9 @@
  *   Description: stores and renders the other components.
  */
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Hero from './Hero';
 import Form from './Form';
-import Results from './Results';
 import Footer from './Footer';
 
 

@@ -1,3 +1,12 @@
+/**
+ *   Programmers: Andy Tran, Sreypich Heng
+ *   Rowan University
+ *   Course: Web Programming CS04305
+ *   Instructor: Marquise Pullen
+ *
+ *   Description: This form allows you to edit an anime
+ */
+
 import React, { useState } from 'react';
 
 function EditAnimeForm({ anime, onAnimeUpdate }) {
