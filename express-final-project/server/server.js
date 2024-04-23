@@ -25,7 +25,7 @@ app.use(express.json());
 secretKey = require('crypto').randomBytes(32).toString('hex');
 
 // Connect to the MongoDB database
-mongoose.connect('mongodb://host.docker.internal:27017/animes')
+mongoose.connect('mongodb://localhost:27017/animes')
         .then(() => console.log('Connected to database'))
         .catch((err) => console.log(err))
 
