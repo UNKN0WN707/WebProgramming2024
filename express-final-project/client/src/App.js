@@ -7,7 +7,7 @@
  *   Description: This file render different pages
  */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Home from './components/Home';
 import Contact from './components/Contact';
@@ -19,18 +19,31 @@ import CreateUserForm from './components/CreateUser';
 
 function App() {
 
+  const [page, setPage] = useState(<p>Loading</p>);
 
-  return (
-    <div>
-      <Navbar />
+  useEffect((page) => {
+    if (localStorage.getItem('user')) {
+      setTimeout(() => {
+        setPage(<div>
+        <Navbar />
         <Routes>
             <Route path="/" element={<Home />} /> 
             <Route path="/contact" element={<Contact />} />
             <Route path="/about" element={<About />} />
             <Route path="/create-user" element={<CreateUserForm />} />
         </Routes>
-    </div>
-  )
+        </div>);}, 2000);
+      
+    } else {
+      setPage(<div>
+        <Routes>
+            <Route path="/create-user" element={<CreateUserForm />} />
+        </Routes>
+        </div>)
+    }
+  }, [page])
+  
+  return (page);
 }
 
 

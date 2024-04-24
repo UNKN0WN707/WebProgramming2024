@@ -7,6 +7,13 @@
  *   Description: stylesheet for Form component.
  */
 
+ .anime_list {
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+ }
+
  .foreground {
     width: 1024px;
     justify-content: center;

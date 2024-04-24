@@ -80,6 +80,7 @@ const Form = () => {
                 </div>
                 <div>
                     <AddAnimeForm onAddAnime={handleAddAnime} />
+                      <div class="anime_list">
                       {animes.map(anime => (
                           <div key={anime._id}>
                             <table class="result">
@@ -88,6 +89,7 @@ const Form = () => {
                             </table>
                           </div>
                       ))}
+                      </div>
                       {editingAnime && (
                     <EditAnimeForm
                         anime={editingAnime}

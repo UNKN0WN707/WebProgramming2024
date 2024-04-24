@@ -4,16 +4,10 @@
  *   Course: Web Programming CS04305
  *   Instructor: Marquise Pullen
  *
-<<<<<<< HEAD
- *   Description: Allows the user to register a new account.
- */
-
-=======
  *   Description: this component allow users to create new account
  */
 
 
->>>>>>> main
 import React, { useState } from 'react';
 import './CreateUser.css';
 import Hero from './Hero';
