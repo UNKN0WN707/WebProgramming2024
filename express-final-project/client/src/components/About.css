@@ -7,7 +7,19 @@
  *   Description: Stylesheet for About page.
  */
 
+.ends {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 20px;
+}
 
+.ends li {
+    width: 200px;
+    height: 200px;
+    list-style: none;
+    padding: 10px;
+    padding-bottom: 30px;
+}
 .about-container {
     max-width: 800px;
     height: 100vh;
@@ -15,12 +27,43 @@
     padding: 20px;
 }
 
-.about-container h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
+.FB-End {
+    color: #f18f8f;
+    text-decoration: underline;
 }
 
-.about-container p {
-    font-size: 16px;
-    line-height: 1.5;
+.iconc {
+    width: 21px;
+}
+
+.iconh {
+    width: 19px;
+}
+
+.iconj {
+    width: 30px;
+    position: relative;
+    top: 4px;
+    left: 2px;
+}
+
+.iconn {
+    width: 40px;
+    position: relative;
+    right: 2px;
+    top: 2px;
+}
+
+.iconm {
+    width: 40px;
+    position: relative;
+    left: 2px;
+    top: 2px;
+}
+
+.separator {
+    height: 7px;
+    background-color: rgb(232, 232, 232);
+    border: none;
+
 }
