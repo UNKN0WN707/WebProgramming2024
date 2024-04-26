@@ -21,7 +21,7 @@ function App() {
 
   const [page, setPage] = useState(<p>Loading</p>);
 
-  useEffect((page) => {
+  useEffect(() => {
     if (localStorage.getItem('user')) {
       setTimeout(() => {
         setPage(<div>
@@ -37,11 +37,11 @@ function App() {
     } else {
       setPage(<div>
         <Routes>
-            <Route path="/create-user" element={<CreateUserForm />} />
+            <Route path="/" element={<CreateUserForm />} />
         </Routes>
         </div>)
     }
-  }, [page])
+  }, [])
   
   return (page);
 }
