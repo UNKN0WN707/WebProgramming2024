@@ -8,7 +8,7 @@
  */
 
 .foreground {
-    width: 1024px;
+    max-width: 1024px;
     justify-content: center;
     margin: auto;
     background-color: white;
@@ -34,7 +34,7 @@
  }
 
  form {
-    width: 400px;
+    max-width: 400px;
     border: 5px solid #e4e1e1;
     padding: 40px;
     box-shadow: 4px 3px 3px #f18f8f;

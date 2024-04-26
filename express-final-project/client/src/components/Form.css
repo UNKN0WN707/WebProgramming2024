@@ -14,8 +14,8 @@
    align-items: center;
  }
 
- .foreground {
-    width: 1024px;
+ .foregroundForm {
+    max-width: 1024px;
     justify-content: center;
     margin: auto;
     background-color: white;
@@ -30,23 +30,6 @@
     height: auto;
     justify-content: center;
     padding-bottom: 20px;
- }
-
- form p {
-    font-size: 30px;
-    font-weight: bold;
-    color: #f18f8f;
-    margin-top: 10px;
- }
-
- form {
-    width: 400px;
-    border: 5px solid #e4e1e1;
-    padding: 40px;
-    box-shadow: 4px 3px 3px #f18f8f;
-    display: flex;
-    flex-direction: column;
-    margin: auto;
  }
 
  .button {
@@ -79,6 +62,4 @@
    background-color: #b19cd9;
 }
 
-
- 
  

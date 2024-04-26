@@ -68,7 +68,7 @@ const Form = () => {
 
     return (
         <div>
-            <div className='foreground'>
+            <div className='foregroundForm'>
                 <div className='howTo'>
                     <h2>How To Use</h2>
                     <p>There are a lot of Anime out there and we are here to help you

@@ -9,7 +9,7 @@
 
  .end {
     display: flex;
-    width: 1024px;
+    max-width: 1024px;
     justify-content: center;
     margin: auto;
     background-color: white;
@@ -45,4 +45,17 @@
 
  .references li:first-child {
     list-style: none;
+ }
+
+ @media screen and (max-width: 600px) {
+   .references li {
+      margin-right: 15px;
+   }
+
+   .references li a {
+      color: white;
+      font-size: 15px;
+      position: relative;
+      right: 8px;
+   }
  }

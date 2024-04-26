@@ -7,6 +7,19 @@
  *   Description: Stylesheet for About page.
  */
 
+ .foregroundAbout {
+    max-width: 1024px;
+    justify-content: center;
+    margin: auto;
+    background-color: white;
+    padding: 40px;
+    border-top: solid 9px #f18f8f;
+    position: relative;
+    bottom: 40px;
+    box-shadow: 2px 3px 3px;
+    width: 100vh;
+ }
+
 .ends {
     display: flex;
     flex-wrap: wrap;
@@ -19,12 +32,6 @@
     list-style: none;
     padding: 10px;
     padding-bottom: 30px;
-}
-.about-container {
-    max-width: 800px;
-    height: 100vh;
-    margin: 0 auto;
-    padding: 20px;
 }
 
 .FB-End {
@@ -66,4 +73,10 @@
     background-color: rgb(232, 232, 232);
     border: none;
 
+}
+
+@media screen and (max-width: 600px) {
+    .foregroundAbout {
+        max-width: 300px;
+    }
 }

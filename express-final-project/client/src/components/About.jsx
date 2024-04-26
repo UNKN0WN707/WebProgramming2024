@@ -4,7 +4,7 @@
  *   Course: Web Programming CS04305
  *   Instructor: Marquise Pullen
  *
- *   Description: this is a component shows the about page
+ *   Description: this is a component shows the about page.
  */
 
 import React from 'react';
@@ -16,7 +16,7 @@ const About = () => {
     return(
         <div>
             <Hero />
-            <div className="foreground">
+            <div className="foregroundAbout">
                 <ul className="ends">
                     <li>
                         <h2 className="FB-End">Front-End</h2>

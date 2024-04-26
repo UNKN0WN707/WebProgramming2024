@@ -24,22 +24,27 @@ function App() {
   useEffect(() => {
     if (localStorage.getItem('user')) {
       setTimeout(() => {
-        setPage(<div>
-        <Navbar />
-        <Routes>
-            <Route path="/" element={<Home />} /> 
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/create-user" element={<CreateUserForm />} />
-        </Routes>
-        </div>);}, 2000);
+        //Add code back
+        console.log();
+      }, 2000)
       
     } else {
-      setPage(<div>
+      
+      /* setPage(<div>
         <Routes>
             <Route path="/" element={<CreateUserForm />} />
         </Routes>
-        </div>)
+        </div>) */
+
+        setPage(<div>
+          <Navbar />
+          <Routes>
+              <Route path="/" element={<Home />} /> 
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/create-user" element={<CreateUserForm />} />
+          </Routes>
+          </div>);
     }
   }, [])
   
