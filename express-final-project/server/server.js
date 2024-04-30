@@ -20,21 +20,21 @@ const router = express.Router();
 const port = 8080;
 
 app.use(cors());
-app.use(express.json()); 
+app.use(express.json());
 
 // Secret key used for the JWT token
 secretKey = require('crypto').randomBytes(32).toString('hex');
+
 
 // Connect to the MongoDB database
 mongoose.connect('mongodb://host.docker.internal:27017/animes')
         .then(() => console.log('Connected to database'))
         .catch((err) => console.log(err))
 
-
 // Anime Schema and Model
 const animeSchema = new mongoose.Schema({
-  title: { type: String, required: true, unique: true }, // Unique title
-  genre: { type: String, required: true }
+  title: { type: String, required: true, unique: false },
+  genre: { type: String, required: true },
 });
 
 const AnimeModel = mongoose.model('Anime', animeSchema);
@@ -53,7 +53,9 @@ const userSchema = new mongoose.Schema({
   username: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  animes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Anime' }]
 });
+
 
 const UserModel = mongoose.model('User', userSchema);
 
@@ -68,7 +70,7 @@ router.get('/api/contacts', async (req, res) => {
 });
 
 // GET all animes
-app.get('/api/animes', async (req, res) => {
+router.get('/api/animes', async (req, res) => {
   try {
     const storedAnimes = await AnimeModel.find({});
     res.json(storedAnimes);
@@ -76,7 +78,6 @@ app.get('/api/animes', async (req, res) => {
     res.status(500).send(error);
   }
 });
-
 // GET a single anime by id
 app.get('/api/animes/:id', async (req, res) => {
   const anime = await AnimeModel.find(a => a.id === parseInt(req.params.id));
@@ -90,15 +91,14 @@ app.get('/api/animes/:id', async (req, res) => {
 router.post('/api/contacts', async (req, res) => {
   const { name, email, feedback } = req.body;
 
-  const inquire = new ContactModel({
-    name, email, feedback
-  });
+  const newContact = new ContactModel({ name, email, feedback });
 
   try {
-    const newFeedback = await inquire.save()
-    res.status(201).send(inquire);
+    await newContact.save();
+    res.status(201).json(newContact);
   } catch (error) {
-    res.status(500).send(error);
+    console.error('Error saving contact:', error);
+    res.status(500).json({ error: error.message });
   }
 });
 
@@ -111,12 +111,16 @@ router.post('/api/animes', async (req, res) => {
     const existingAnime = await AnimeModel.findOne({ title });
 
     if (existingAnime) {
-      // If an anime with the same title exists, return an error
       return res.status(400).json({ message: 'An anime with the same title already exists.' });
     }
 
-    // If the anime title is unique, save the new anime
-    const newAnime = new AnimeModel({ title, genre });
+    // Retrieve user ID from JWT token
+    const token = req.headers.authorization.split(' ')[1]; // Extract token from Authorization header
+    const decodedToken = jwt.verify(token, secretKey);
+    const userId = decodedToken.userId;
+
+    // Create a new anime associated with the user's ID
+    const newAnime = new AnimeModel({ title, genre, userId });
     await newAnime.save();
 
     res.status(201).json(newAnime);
@@ -163,40 +167,6 @@ router.get('/api/users', async (req, res) => {
   }
 });
 
-// PUT - Update user by ID
-router.put('/api/users/:id', async (req, res) => {
-  const { id } = req.params;
-  const { username, email, password } = req.body;
-
-  try {
-      const updatedUser = await UserModel.findByIdAndUpdate(id, { username, email, password }, { new: true });
-
-      if (updatedUser) {
-          res.json(updatedUser);
-      } else {
-          res.status(404).json({ message: 'User not found' });
-      }
-  } catch (error) {
-      res.status(500).json({ message: 'Internal server error' });
-  }
-});
-
-// DELETE user by ID
-router.delete('/api/users/:id', async (req, res) => {
-  const { id } = req.params;
-
-  try {
-      const deletedUser = await UserModel.findByIdAndDelete(id);
-
-      if (deletedUser) {
-          res.status(204).send(); // No content to send back
-      } else {
-          res.status(404).json({ message: 'User not found' });
-      }
-  } catch (error) {
-      res.status(500).json({ message: 'Internal server error' });
-  }
-});
 
 // PUT update feedback
 router.put('/api/contacts/:id', async (req, res) => {
@@ -218,11 +188,11 @@ router.put('/api/contacts/:id', async (req, res) => {
 
 // PUT update an anime
 router.put('/api/animes/:id', async (req, res) => {
-  const { id } = req.params.id;
+  const id = req.params.id;
   const { title, genre } = req.body;
 
   try {
-    const updatedAnime = await AnimeModel.findByIdAndUpdate(id, { title, genre });
+    const updatedAnime = await AnimeModel.findByIdAndUpdate(id, { title, genre }, { new: true });
 
     if (updatedAnime) {
       res.json(updatedAnime);
@@ -234,22 +204,7 @@ router.put('/api/animes/:id', async (req, res) => {
   }
 });
 
-// DELETE a piece of feedback
-router.delete('/api/contacts/:id', async (req, res) => {
-  const { id } = req.params;
 
-  try {
-    const deletedContact = await ContactModel.findByIdAndDelete(id);
-
-    if (deletedContact) {
-      res.status(204).send(); //Nothing to send back
-    } else {
-      res.status(404).send('Feedback Not Found');
-    }
-  } catch (error) {
-    res.status(500).send(error);
-  }
-});
 
 // DELETE an anime
 router.delete('/api/animes/:id', async (req, res) => {
@@ -285,11 +240,23 @@ router.post('/signup', async (req, res) => {
     const newUser = new UserModel({ username, email, password });
     await newUser.save();
 
-    res.status(201).json({ message: 'User created successfully' });
-  } catch (error) {
+    // Create a token that includes the new user's ID
+    const token = jwt.sign({ userId: newUser._id }, secretKey, { expiresIn: '1h' });
+
+    // Return a success message, user info, and the token
+    res.status(201).json({
+      message: 'User created successfully',
+      user: {
+        username: newUser.username,
+        email: newUser.email,
+        token: token  
+      }
+    });
+    } catch (error) {
+    console.error(error);
     res.status(500).json({ message: 'Internal server error' });
-  }
-});
+    }
+    });
 
 
 // POST - Signin
@@ -297,30 +264,22 @@ router.post('/signin', async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // Find the user by email
     const user = await UserModel.findOne({ email });
-
-    if (!user) {
-      return res.status(400).json({ message: 'Login failed! User not found' });
+    if (!user || user.password !== password) {
+      return res.status(400).json({ message: 'Login failed! User not found or password does not match' });
     }
 
-    // Compare the plaintext password
-    if (user.password !== password) {
-      return res.status(400).json({ message: 'Login failed! Password not a match' });
+    const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '1h' }); 
+    console.log("Token generated:", token);
+ 
 
-    }
-
-    const token = jwt.sign({ username: user.username }, secretKey, { expiresIn: '1h' });
-    console.log(token);
-
-    // Return user data (excluding the password)
-    res.status(200).json({
+    res.json({
       message: 'Login successful',
       user: {
         username: user.username,
-        email: user.email,
-        token: token
-      }
+        email: user.email
+      },
+      token  
     });
   } catch (error) {
     console.error(error);
@@ -328,25 +287,8 @@ router.post('/signin', async (req, res) => {
   }
 });
 
-
-// utilize Cookies for Sensitive Data
-app.post('/signin', async (req, res) => {
-  // user authentication logic 
-  if (authenticated) {
-    res.cookie('sessionToken', sessionToken, {
-      httpOnly: true,
-      secure: true,  // Set to true if using HTTPS
-      sameSite: 'Strict'
-    });
-    res.status(200).json({ message: 'Authentication successful' });
-  } else {
-    res.status(401).json({ message: 'Authentication failed' });
-  }
-});
-
 app.use('/', router);
 app.use('/api', router); 
-
 
 app.listen(port, () => {
   console.log(`Anime Collection Tracker API running at http://localhost:${port}`);

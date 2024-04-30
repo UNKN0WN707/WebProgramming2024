@@ -5,35 +5,43 @@ function ContactForm({ onAddContact }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const [isSubmitted, setIsSubmitted] = useState(false); // New state for tracking submission status
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const newContact = { name, email, feedback: message }; 
+    const newContact = { name, email, feedback: message };
 
-    // Send POST request to server endpoint
-    fetch('http://localhost:8081/api/contacts', {
+    fetch('http://localhost:8080/api/contacts', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(newContact),
     })
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok: ' + response.statusText);
+      }
+      return response.json();
+    })
     .then(data => {
       console.log('Success:', data);
-      
-      if(onAddContact) {
+      if (onAddContact) {
         onAddContact(data);
       }
-      
       setName('');
       setEmail('');
       setMessage('');
+      setIsSubmitted(true); // Set the submission status to true
     })
     .catch((error) => {
       console.error('Error:', error);
     });
   };
+
+  if (isSubmitted) {
+    return <div>Thank you for contacting us!</div>;
+  }
 
   return (
     <form onSubmit={handleSubmit}>

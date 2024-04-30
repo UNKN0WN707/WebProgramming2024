@@ -4,20 +4,19 @@
  *   Course: Web Programming CS04305
  *   Instructor: Marquise Pullen
  *
- *   Description: This form allows you to sign up an account
+ *   Description: This form allows you to sign into an account
  */
 
 import React, { useState } from 'react';
 import './Signinandup.css';
 
-const SignupForm = ({ onSignup }) => {
+const SigninForm = ({ onSignin }) => {
   const [formData, setFormData] = useState({
-    username: '',
     email: '',
     password: ''
   });
-  const [showPassword, setShowPassword] = useState(false); // track password
-  const [message, setMessage] = useState(''); 
+  const [showPassword, setShowPassword] = useState(false); // Track password visibility
+  const [message, setMessage] = useState('');
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -27,42 +26,38 @@ const SignupForm = ({ onSignup }) => {
     e.preventDefault();
     setMessage(''); // Clear previous messages
     try {
-      const response = await fetch('http://localhost:8081/api/signup', {
+      const response = await fetch('http://localhost:8080/api/signin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
       });
-      const data = await response.json();
+
       if (response.ok) {
-        onSignup(); // Notify parent component upon successful signup
-        setMessage('Signup successful! Please log in.');
+        const data = await response.json();
+        console.log("Received data with token:", data);
+        
+        localStorage.setItem('token', data.token); // Save the token to localStorage
+        console.log("Stored token:", localStorage.getItem('token'));
+        
+        localStorage.setItem('user', JSON.stringify(data.user)); // Optionally save other user data
+        onSignin(data.user.username, data.token); // Pass both username and token
       } else {
-        throw new Error(data.message || 'Failed to sign up');
+        const errorMessage = await response.json(); // Handle JSON error messages
+        throw new Error(errorMessage.message || 'Failed to sign in');
       }
     } catch (error) {
       setMessage(error.message);
-      console.error('Error:', error);
     }
   };
 
-  const togglePasswordVisibility = () => {
+  const togglePasswordVisibility = () => { // Function to toggle password visibility
     setShowPassword(!showPassword);
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <label>
-        Username:
-        <input
-          type="text"
-          name="username"
-          value={formData.username}
-          onChange={handleChange}
-          required
-        />
-      </label>
       <label>
         Email:
         <input
@@ -88,13 +83,13 @@ const SignupForm = ({ onSignup }) => {
           </button>
         </div>
       </label>
-      <button type="submit">Sign Up</button>
+      <button type="submit">Sign In</button>
       {message && <div className="error-message">
-                <span className="error-icon" style={{ paddingRight: "10px" }}>⚠️</span>
-                {message}
-            </div>}
+        <span className="error-icon" style={{ paddingRight: "10px" }}>⚠️</span>
+        {message}
+      </div>}
     </form>
   );
 };
 
-export default SignupForm;
+export default SigninForm;

@@ -4,14 +4,15 @@
  *   Course: Web Programming CS04305
  *   Instructor: Marquise Pullen
  *
- *   Description: This form allows you to sign into an account
+ *   Description: This form allows you to sign up an account
  */
 
 import React, { useState } from 'react';
 import './Signinandup.css';
 
-const SigninForm = ({ onSignin }) => {
+const SignupForm = ({ onSignup }) => {
   const [formData, setFormData] = useState({
+    username: '',
     email: '',
     password: ''
   });
@@ -26,7 +27,7 @@ const SigninForm = ({ onSignin }) => {
     e.preventDefault();
     setMessage(''); // Clear previous messages
     try {
-      const response = await fetch('http://localhost:8081/api/signin', {
+      const response = await fetch('http://localhost:8080/api/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -34,18 +35,12 @@ const SigninForm = ({ onSignin }) => {
         body: JSON.stringify(formData),
       });
       const data = await response.json();
-      
       if (response.ok) {
-        onSignin(data.user.username);
+        onSignup(); // Notify parent component upon successful signup
+        setMessage('Signup successful! Please log in.');
       } else {
-        throw new Error(data.message || 'Failed to sign in');
+        throw new Error(data.message || 'Failed to sign up');
       }
-
-      localStorage.setItem('user', data.user.token); // store the JWT token into local storage
-
-      //localStorage.setItem('user', JSON.stringify(data.user)); // Store the full user object, including the token
-      console.log(localStorage); 
-
     } catch (error) {
       setMessage(error.message);
       console.error('Error:', error);
@@ -53,13 +48,21 @@ const SigninForm = ({ onSignin }) => {
   };
 
   const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword); // show/hide password
+    setShowPassword(!showPassword);
   };
-
-  
 
   return (
     <form onSubmit={handleSubmit}>
+      <label>
+        Username:
+        <input
+          type="text"
+          name="username"
+          value={formData.username}
+          onChange={handleChange}
+          required
+        />
+      </label>
       <label>
         Email:
         <input
@@ -85,14 +88,13 @@ const SigninForm = ({ onSignin }) => {
           </button>
         </div>
       </label>
-      <button type="submit">Sign In</button>
+      <button type="submit">Sign Up</button>
       {message && <div className="error-message">
                 <span className="error-icon" style={{ paddingRight: "10px" }}>⚠️</span>
                 {message}
             </div>}
-
     </form>
   );
 };
 
-export default SigninForm;
+export default SignupForm;

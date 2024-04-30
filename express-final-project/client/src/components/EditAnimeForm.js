@@ -15,13 +15,16 @@ function EditAnimeForm({ anime, onAnimeUpdate }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
+  
+    console.log('Sending PUT request with:', { title, genre });
+  
     fetch(`/api/animes/${anime._id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ title, genre }),
     })
     .then(response => {
+      console.log('Response received:', response);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -33,6 +36,7 @@ function EditAnimeForm({ anime, onAnimeUpdate }) {
     })
     .catch(error => console.error('There was an error!', error));
   };
+  
 
   return (
     <div>

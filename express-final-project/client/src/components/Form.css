@@ -57,6 +57,7 @@
 
  .result {
    margin-top: 30px;
+   
  }
 
 .btn {
@@ -72,6 +73,9 @@
    background-color: #b19cd9;
 }
 
+.titles {
+   color: #9678b6;
+}
 
  
  

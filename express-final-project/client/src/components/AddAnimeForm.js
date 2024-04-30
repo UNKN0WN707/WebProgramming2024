@@ -17,21 +17,32 @@ function AddAnimeForm({ onAddAnime }) {
   const handleSubmit = (event) => {
     event.preventDefault();
     const newAnime = { title, genre };
+    const token = localStorage.getItem('token');  
+
+    if (!token) {
+      console.error("No token found, please login first.");
+      return;  
+    }
 
     // Send POST request to server endpoint
-    fetch('http://localhost:8081/api/animes', {
+    fetch('http://localhost:8080/api/animes', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}` 
       },
-      body: JSON.stringify(newAnime),
+      body: JSON.stringify(newAnime)
     })
-    .then(response => response.json())
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error('Failed to add anime');
+      }
+    })
     .then(data => {
       console.log('Success:', data);
-      // Call the onAddAnime function passed as prop
       onAddAnime(data);
-      // Clear form fields
       setTitle('');
       setGenre('');
     })
