@@ -27,17 +27,23 @@ const Contact = () => {
         <div>
             <Hero />
              <div className='foregroundContact'>
-              <div>
-                  <h2>Contact Us</h2>
-                  <img src={profilePicture} alt="Andy Tran" className="about-img"/>
-                  <div className="dev">
+             <h2>About Us</h2>
+                <div className='dev'>
+                    <img src={profilePicture} alt="Andy Tran" className="about-img"/>
                     <p>Developer: Andy Tran</p>
-                  </div>
-                  <img src={profilePic} alt="Sreypich Heng" className="about-img"/>
-              </div>
-            </div>
+                    <p>Based in NJ</p> 
+                    <p>B.S in Computer Science</p>
+            
+            
+                    <img src={profilePic} alt="Sreypich Heng" className="about-img"/>
+                    <p>Developer: Sreypich Heng</p>
+                    <p>Based in PA</p>
+                    <p>B.S in Computer Science</p>
+               
+                </div>
+        </div>
             <div className="contact-form-container">
-                <h2>Contact Us</h2>
+                <h2>Leave Us a Message or Feedback</h2>
                 <ContactForm onAddContact={handleAddContact} />
             </div>
             <Footer />

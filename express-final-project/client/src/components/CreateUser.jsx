@@ -109,7 +109,6 @@ const CreateUserForm = () => {
             {showSignin && <SigninForm onSignin={handleAuthenticated} />}
             {isAuthenticated && (
               <form onSubmit={handleSubmit}>
-                {/* Add form elements for authenticated user */}
               </form>
             )}
           </div>

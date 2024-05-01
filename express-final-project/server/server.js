@@ -34,7 +34,7 @@ mongoose.connect('mongodb://host.docker.internal:27017/animes')
 
 // Anime Schema and Model
 const animeSchema = new mongoose.Schema({
-  title: { type: String, required: true, unique: false },
+  title: { type: String, required: true },
   genre: { type: String, required: true },
 });
 
@@ -117,8 +117,6 @@ router.get('/api/users/:name', async (req, res) => {
   res.json(user);
 });
 
-
-
 // POST new feedback
 router.post('/api/contacts', async (req, res) => {
   const { name, email, feedback } = req.body;
@@ -140,23 +138,21 @@ router.post('/api/animes', async (req, res) => {
   const { title, genre } = req.body;
 
   try {
-    const authHeader = req.headers.authorization;
-    if (!authHeader) {
-        return res.status(401).json({ message: 'No token provided' });
-    }
-    const token = authHeader.split(' ')[1];
-    const decodedToken = jwt.verify(token, secretKey);
-    const userId = decodedToken.userId;
-
+    // Check if an anime with the same title already exists
     const existingAnime = await AnimeModel.findOne({ title });
+
     if (existingAnime) {
+      // If an anime with the same title exists, return an error
       return res.status(400).json({ message: 'An anime with the same title already exists.' });
     }
 
-    const newAnime = new AnimeModel({ title, genre, userId });
+    // If the anime title is unique, save the new anime
+    const newAnime = new AnimeModel({ title, genre });
     await newAnime.save();
+
     res.status(201).json(newAnime);
   } catch (error) {
+    console.error('Failed to save anime:', error); 
     res.status(500).json({ message: "Failed to add anime", error: error.message });
   }
 });
@@ -250,26 +246,19 @@ router.post('/signup', async (req, res) => {
   const { username, email, password } = req.body;
 
   try {
+    // Check if user with given email already exists
     const existingUser = await UserModel.findOne({ email });
+
     if (existingUser) {
       return res.status(400).json({ message: 'User already exists' });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new UserModel({ username, email, password: hashedPassword });
+    // Create a new user without hashing the password
+    const newUser = new UserModel({ username, email, password });
     await newUser.save();
 
-    const token = jwt.sign({ userId: newUser._id }, secretKey, { expiresIn: '1h' });
-    res.status(201).json({
-      message: 'User created successfully',
-      user: {
-        username: newUser.username,
-        email: newUser.email,
-        token  
-      }
-    });
+    res.status(201).json({ message: 'User created successfully' });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: 'Internal server error' });
   }
 });
@@ -280,23 +269,29 @@ router.post('/signin', async (req, res) => {
   const { email, password } = req.body;
 
   try {
+    // Find the user by email
     const user = await UserModel.findOne({ email });
+
     if (!user) {
       return res.status(400).json({ message: 'Login failed! User not found' });
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ message: 'Password does not match' });
+    // Compare the plaintext password
+    if (user.password !== password) {
+      return res.status(400).json({ message: 'Login failed! Password not a match' });
+
     }
 
-    const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '1h' });
-    res.json({
+    const token = jwt.sign({ username: user.username }, secretKey, { expiresIn: '1h' });
+    console.log(token);
+
+    // Return user data (excluding the password)
+    res.status(200).json({
       message: 'Login successful',
       user: {
         username: user.username,
         email: user.email,
-        token  
+        token: token
       }
     });
   } catch (error) {

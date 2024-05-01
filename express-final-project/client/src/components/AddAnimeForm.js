@@ -19,10 +19,12 @@ function AddAnimeForm({ onAddAnime }) {
     const newAnime = { title, genre };
     const token = localStorage.getItem('token');
   
-    //if (!token) {
-    //  console.error("No token found, please login first.");
-     // return;
-    //}
+    if (!token) {
+      console.error("No token found, please login first.");
+      return;
+    }
+  
+    console.log("Sending Token:", token); // Debugging output
   
     fetch('http://localhost:8080/api/animes', {
       method: 'POST',
@@ -40,7 +42,6 @@ function AddAnimeForm({ onAddAnime }) {
       }
     })
     .then(data => {
-      console.log('Success:', data);
       onAddAnime(data);
       setTitle('');
       setGenre('');
@@ -49,6 +50,8 @@ function AddAnimeForm({ onAddAnime }) {
       console.error('Error:', error);
     });
   };
+  
+  
 
   return (
     <form onSubmit={handleSubmit}>

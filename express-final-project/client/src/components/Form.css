@@ -7,65 +7,75 @@
  *   Description: stylesheet for Form component.
  */
 
- .anime_list {
-   display: flex;
-   flex-direction: column;
+
+ .foreground {
+   max-width: 1024px;
    justify-content: center;
-   align-items: center;
- }
-
- .foregroundForm {
-    max-width: 1024px;
-    justify-content: center;
-    margin: auto;
-    background-color: white;
-    padding: 40px;
-    border-top: solid 9px #f18f8f;
-    position: relative;
-    bottom: 40px;
-    box-shadow: 2px 3px 3px;
- }
-
- .howTo {
-    height: auto;
-    justify-content: center;
-    padding-bottom: 20px;
- }
-
- .button {
-   width: 200px;
-   height: 40px;
-   border-radius: 10px;
-   background-color: #f18f8f;
-   font-size: 15px;
+   margin: auto;
+   background-color: white;
+   padding: 40px;
+   border-top: solid 9px #f18f8f;
    position: relative;
+   bottom: 40px;
+   box-shadow: 2px 3px 3px;
+   flex-direction: column;
+ }
+ 
+ .howTo {
+   height: auto;
+   justify-content: center;
+   padding-bottom: 20px;
  }
 
- .button:hover {
-   background-color: #ce7b7b;
+ .howTo p {
+   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+   font-size: medium;
  }
-
+ 
  .result {
+   width: 100%;
+   border-collapse: collapse;
    margin-top: 30px;
-   
  }
-
-.btn {
-   height: 40px;
+ 
+ .result th,
+ .result td {
+   border: 1px solid #ddd;
+   padding: 8px;
+ }
+ 
+ .result th {
+   background-color: #f2f2f2;
+   color: #9678b6;
+   text-align: center;
+ }
+ 
+ .result td {
+   text-align: left;
+ }
+ 
+ .result tr:nth-child(even) {
+   background-color: #f2f2f2;
+ }
+ 
+ .action {
+   text-align: right;
+ }
+ 
+ .action .btn {
+   margin-left: 5px;
+ }
+ 
+ .btn {
+   height: 30px;
    border-radius: 6px;
    background-color: #9678b6;
-   font-size: 15px;
-   position: relative;
-   
-}
-
-.btn:hover {
-   background-color: #b19cd9;
-}
-
-.titles {
-   color: #9678b6;
-}
-
+   color: white;
+   font-size: 14px;
+   cursor: pointer;
+ }
  
+ .btn:hover {
+   background-color: #b19cd9;
+ }
  
