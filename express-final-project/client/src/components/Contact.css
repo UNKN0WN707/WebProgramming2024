@@ -7,11 +7,22 @@
  *   Description: Stylesheet for Contact page.
  */
 
+ .foregroundContact {
+    width: 1024px;
+    margin: auto;
+    justify-content: center;
+    background-color: white;
+    padding: 20px;
+    border-top: solid 9px #f18f8f;
+    position: relative;
+    box-shadow: 2px 3px 3px;
+ }
+
 
 .contact-form-container {
-    height: 100vh;
     max-width: 600px;
     margin: 0 auto;
+    margin-top: 20px;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -21,10 +32,6 @@
 .contact-form {
     display: flex;
     flex-direction: column;
-}
-
-.form-group {
-    margin-bottom: 15px;
 }
 
 label {
@@ -54,4 +61,19 @@ button {
 
 button:hover {
     background-color: #0056b3;
+}
+
+.about-img {
+    border: 2px solid #f18f8f;
+    border-radius: 50px;
+    height: 250px;
+    max-width: 200px;
+    display: flex;
+    margin: auto;
+}
+
+.dev {
+    border-radius: 2px;
+    display: flex;
+    flex-direction: column;
 }

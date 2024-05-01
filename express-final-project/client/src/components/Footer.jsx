@@ -10,20 +10,22 @@
 import React from 'react';
 import './Footer.css';
 
-const Footer = () => {
+function Footer() {
     return (
-        <div className='end'>
-            <footer>
-                <p>References</p>
-                <ul className='references'>
-                    <li><a href="https://developer.mozilla.org/en-US/">MDN (HTML/CSS/Javascript)</a></li>
-                    <li><a href="https://www.mongodb.com/">MongoDB</a></li>
-                    <li><a href="https://react.dev/">React.js</a></li>
-                    <li><a href="https://nodejs.org/en">Node.js</a></li>
-                </ul>
-            </footer>
-        </div>
+        <footer>
+            <hr />
+            <div className="row">
+                <div className="col">
+                    <p>&#169; 2024 Designed by <span className="designer1">Sreypich. & Andy. </span>All Rights Reserved.</p>
+                </div>
+                <div className="socialIcons">
+                    <a href="https://www.instagram.com/sreypichheng_/"><i className="fa-brands fa-instagram"></i></a>
+                    <a href="https://www.facebook.com/UNKN0WN707/"><i className="fa-brands fa-facebook"></i></a>
+                    <a href="https://github.com/UNKN0WN707"><i className="fa-brands fa-github"></i></a>
+                </div>
+            </div>
+        </footer>
     );
-};
+}
 
 export default Footer;

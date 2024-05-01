@@ -101,7 +101,7 @@ const CreateUserForm = () => {
           </div>
         ) : (
           <div>
-            <h2>New User</h2>
+            <h2>Don't have an account? Sign up.</h2>
             <button onClick={handleSignup}>Sign Up</button>
             <h2>Existing User</h2>
             <button onClick={handleSignin}>Sign In</button>

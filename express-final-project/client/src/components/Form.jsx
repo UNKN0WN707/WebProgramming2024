@@ -99,11 +99,11 @@ const Form = () => {
           <div className='foreground'>
               <div className='howTo'>
                   <h2>How To Use</h2>
-                  <p>There are a lot of Anime out there and we are here to help you
-                      keep track of all of them! To use the Anime Collection Tracker, please enter
-                      the name and genre of the anime in the form below. You can then rate the anime you
-                      watched from a scale of 1 to 10 using the slider. Hit submit and the anime you
-                      entered will get stored in our database.
+                  <p> There are a lot of Anime out there and we are here to help you keep track of
+                    them all! To use the Anime Collection Tracker, please sign up or signin in order to enter the name and genres of the 
+                    anime in the form. You can then submit the Anime to our database and we will store it there for you.
+                    Once entered into the database, you can edit the Anime entry in case you made a mistake or
+                    delete the entry.
                   </p>
               </div>
               <div>
@@ -142,6 +142,7 @@ const Form = () => {
                       </div>
                   ) : (
                       <p>Please sign in to view your anime collection.</p>
+                      
                   )}
               </div>
           </div>
