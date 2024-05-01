@@ -22,12 +22,13 @@ const port = 8080;
 app.use(cors());
 app.use(express.json());
 
+
 // Secret key used for the JWT token
 secretKey = require('crypto').randomBytes(32).toString('hex');
 
 
 // Connect to the MongoDB database
-mongoose.connect('mongodb://localhost:27017/animes')
+mongoose.connect('mongodb://host.docker.internal:27017/animes')
         .then(() => console.log('Connected to database'))
         .catch((err) => console.log(err))
 
@@ -53,11 +54,29 @@ const userSchema = new mongoose.Schema({
   username: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  animes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Anime' }]
 });
 
 
 const UserModel = mongoose.model('User', userSchema);
+
+// Define routes
+router.get('/api/contacts', async (req, res) => {
+  try {
+    const feedbacks = await ContactModel.find({});
+    res.json(feedbacks);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+router.get('/api/animes', async (req, res) => {
+  try {
+    const storedAnimes = await AnimeModel.find({});
+    res.json(storedAnimes);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
 
 // GET all the feedback from Contact Form
 router.get('/api/contacts', async (req, res) => {
@@ -79,6 +98,15 @@ router.get('/api/animes', async (req, res) => {
   }
 });
 
+// GET a single anime by id
+router.get('/api/animes/:id', async (req, res) => {
+  const anime = await AnimeModel.find(a => a.id === parseInt(req.params.id));
+  if (!anime) {
+    return res.status(404).send('Anime not found');
+  }
+  res.json(anime);
+});
+
 // Get a user by name
 router.get('/api/users/:name', async (req, res) => {
   const user = await UserModel.find(a => a.name === req.params.name);
@@ -89,14 +117,7 @@ router.get('/api/users/:name', async (req, res) => {
   res.json(user);
 });
 
-// GET a single anime by id
-router.get('/api/animes/:id', async (req, res) => {
-  const anime = await AnimeModel.find(a => a.id === parseInt(req.params.id));
-  if (!anime) {
-    return res.status(404).send('Anime not found');
-  }
-  res.json(anime);
-});
+
 
 // POST new feedback
 router.post('/api/contacts', async (req, res) => {
@@ -113,46 +134,29 @@ router.post('/api/contacts', async (req, res) => {
   }
 });
 
-// POST a new user
-router.post('/api/users', async (req, res) => {
-  const { name, password } = req.body;
-
-  const user = new UserModel({
-    name, password
-  });
-
-  try {
-    const newUser = await user.save()
-    res.status(201).send(newUser);
-  } catch (error) {
-    res.status(500).send(error);
-  }
-});
 
 // POST a new anime
 router.post('/api/animes', async (req, res) => {
   const { title, genre } = req.body;
 
   try {
-    // Check if an anime with the same title already exists
-    const existingAnime = await AnimeModel.findOne({ title });
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        return res.status(401).json({ message: 'No token provided' });
+    }
+    const token = authHeader.split(' ')[1];
+    const decodedToken = jwt.verify(token, secretKey);
+    const userId = decodedToken.userId;
 
+    const existingAnime = await AnimeModel.findOne({ title });
     if (existingAnime) {
       return res.status(400).json({ message: 'An anime with the same title already exists.' });
     }
 
-    // Retrieve user ID from JWT token
-    const token = req.headers.authorization.split(' ')[1]; // Extract token from Authorization header
-    const decodedToken = jwt.verify(token, secretKey);
-    const userId = decodedToken.userId;
-
-    // Create a new anime associated with the user's ID
     const newAnime = new AnimeModel({ title, genre, userId });
     await newAnime.save();
-
     res.status(201).json(newAnime);
   } catch (error) {
-    console.error('Failed to save anime:', error); 
     res.status(500).json({ message: "Failed to add anime", error: error.message });
   }
 });
@@ -179,16 +183,6 @@ router.post('/api/users', async (req, res) => {
       await newUser.save();
 
       res.status(201).json({ message: 'User created successfully' });
-  } catch (error) {
-      res.status(500).json({ message: 'Internal server error' });
-  }
-});
-
-// GET all users
-router.get('/api/users', async (req, res) => {
-  try {
-      const users = await UserModel.find({});
-      res.json(users);
   } catch (error) {
       res.status(500).json({ message: 'Internal server error' });
   }
@@ -256,34 +250,29 @@ router.post('/signup', async (req, res) => {
   const { username, email, password } = req.body;
 
   try {
-    // Check if user with given email already exists
     const existingUser = await UserModel.findOne({ email });
-
     if (existingUser) {
       return res.status(400).json({ message: 'User already exists' });
     }
 
-    // Create a new user without hashing the password
-    const newUser = new UserModel({ username, email, password });
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new UserModel({ username, email, password: hashedPassword });
     await newUser.save();
 
-    // Create a token that includes the new user's ID
     const token = jwt.sign({ userId: newUser._id }, secretKey, { expiresIn: '1h' });
-
-    // Return a success message, user info, and the token
     res.status(201).json({
       message: 'User created successfully',
       user: {
         username: newUser.username,
         email: newUser.email,
-        token: token  
+        token  
       }
     });
-    } catch (error) {
+  } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal server error' });
-    }
-    });
+  }
+});
 
 
 // POST - Signin
@@ -292,21 +281,23 @@ router.post('/signin', async (req, res) => {
 
   try {
     const user = await UserModel.findOne({ email });
-    if (!user || user.password !== password) {
-      return res.status(400).json({ message: 'Login failed! User not found or password does not match' });
+    if (!user) {
+      return res.status(400).json({ message: 'Login failed! User not found' });
     }
 
-    const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '1h' }); 
-    console.log("Token generated:", token);
- 
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Password does not match' });
+    }
 
+    const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '1h' });
     res.json({
       message: 'Login successful',
       user: {
         username: user.username,
-        email: user.email
-      },
-      token  
+        email: user.email,
+        token  
+      }
     });
   } catch (error) {
     console.error(error);
