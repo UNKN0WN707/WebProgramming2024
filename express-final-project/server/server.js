@@ -213,23 +213,6 @@ router.put('/api/contacts/:id', async (req, res) => {
   }
 });
 
-// PUT update a user
-router.put('/api/user/:id', async (req, res) => {
-  const { id } = req.params.id;
-  const { password } = req.body;
-
-  try {
-    const updatedUser = await UserModel.findByIdAndUpdate(id, { password });
-
-    if (updatedUser) {
-      res.json(updatedUser);
-    } else {
-      res.status(404).send('User Not Found');
-    }
-  } catch (error) {
-    res.status(500).send(error);
-  }
-});
 
 // PUT update an anime
 router.put('/api/animes/:id', async (req, res) => {
@@ -249,24 +232,6 @@ router.put('/api/animes/:id', async (req, res) => {
   }
 });
 
-
-
-// DELETE a user
-router.delete('/api/user/:id', async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const deletedUser= await UserModel.findByIdAndDelete(id);
-
-    if (deletedUser) {
-      res.status(204).send(); //Nothing to send back
-    } else {
-      res.status(404).send('User Not Found');
-    }
-  } catch (error) {
-    res.status(500).send(error);
-  }
-});
 
 // DELETE an anime
 router.delete('/api/animes/:id', async (req, res) => {

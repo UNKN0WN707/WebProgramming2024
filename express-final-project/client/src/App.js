@@ -30,12 +30,6 @@ function App() {
       
     } else {
       
-      /* setPage(<div>
-        <Routes>
-            <Route path="/" element={<CreateUserForm />} />
-        </Routes>
-        </div>) */
-
         setPage(<div>
           <Navbar />
           <Routes>

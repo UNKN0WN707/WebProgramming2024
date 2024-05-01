@@ -16,11 +16,7 @@ function Footer() {
             <hr />
             <div className="row">
                 <div className="col">
-<<<<<<< Updated upstream
                     <p>&#169; 2024 Designed by <span className="designer1">Sreypich. & Andy. </span>All Rights Reserved.</p>
-=======
-                    <p>&#169; 2024 Designed by <span className="designer1">Sreypich.</span>All Rights Reserved.</p>
->>>>>>> Stashed changes
                 </div>
                 <div className="socialIcons">
                     <a href="https://www.instagram.com/sreypichheng_/"><i className="fa-brands fa-instagram"></i></a>
