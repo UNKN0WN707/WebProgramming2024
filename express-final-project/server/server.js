@@ -7,8 +7,6 @@
  *   Description: Server side of the final project using Express and MongoDB.
  */
 
-// Running database ("/c/Program Files/MongoDB/Server/7.0/bin/mongod.exe" --dbpath="C:\Web Dev\Web Programming\data\animes")
-
 const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
@@ -285,7 +283,7 @@ router.post('/signin', async (req, res) => {
     const token = jwt.sign({ username: user.username }, secretKey, { expiresIn: '1h' });
     console.log(token);
 
-    // Return user data (excluding the password)
+    
     res.status(200).json({
       message: 'Login successful',
       user: {
