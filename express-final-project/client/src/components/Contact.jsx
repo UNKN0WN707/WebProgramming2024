@@ -30,16 +30,20 @@ const Contact = () => {
              <h2>About Us</h2>
                 <div className='dev'>
                     <img src={profilePicture} alt="Andy Tran" className="about-img"/>
-                    <p>Developer: Andy Tran</p>
-                    <p>Based in NJ</p> 
-                    <p>B.S in Computer Science</p>
+                    <ul className='about'>
+                        <li><p>Developer: Andy Tran</p></li>
+                        <li><p>Based in NJ</p></li>
+                        <li><p>B.S in Computer Science</p></li>
+                    </ul>
+                    
             
             
                     <img src={profilePic} alt="Sreypich Heng" className="about-img"/>
-                    <p>Developer: Sreypich Heng</p>
-                    <p>Based in PA</p>
-                    <p>B.S in Computer Science</p>
-               
+                    <ul className='about'>
+                        <li><p>Developer: Sreypich Heng</p></li>
+                        <li><p>Based in PA</p></li>
+                        <li><p>B.S in Computer Science</p></li>
+                    </ul>              
                 </div>
         </div>
             <div className="contact-form-container">

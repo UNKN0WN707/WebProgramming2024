@@ -7,19 +7,6 @@
  *   Description: this is the style sheet for sign in and up form
  */
 
-.foreground {
-    max-width: 1024px;
-    justify-content: center;
-    margin: auto;
-    background-color: white;
-    padding: 40px;
-    border-top: solid 9px #f18f8f;
-    position: relative;
-    bottom: 40px;
-    box-shadow: 2px 3px 3px;
-    width: 100vh;
- }
-
  .howTo {
     height: auto;
     justify-content: center;

@@ -9,7 +9,7 @@
 
  .foregroundContact {
     max-width: 1024px;
-    height: 500px;
+    height: 300px;
     margin: auto;
     justify-content: center;
     background-color: white;
@@ -17,6 +17,20 @@
     border-top: solid 9px #f18f8f;
     position: relative;
     box-shadow: 2px 3px 3px;
+ }
+
+ .about li {
+    list-style: none;
+    padding-top: 5px;
+    padding-bottom: 5px;
+ }
+
+ .about li p {
+    font-size: 20px;
+ }
+
+ .about {
+    padding: 10px;
  }
 
 
@@ -58,7 +72,7 @@ textarea {
 .dev {
     display: flex;
     align-items: center; 
-    margin-bottom: 20px; 
+    justify-content: space-between; 
 }
 
 .about-img {
@@ -75,3 +89,17 @@ textarea {
     margin: 0; 
     display: block;
 }
+
+@media screen and (max-width: 600px) {
+    .foregroundContact {
+        width: 500px;
+    }
+
+    .contact-form-container {
+        width: 500px;
+    }
+
+    .about li p {
+        font-size: 15px;
+     }
+  }
