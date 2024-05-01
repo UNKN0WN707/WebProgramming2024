@@ -72,4 +72,34 @@
  }
 
 
+ @media screen and (max-width: 600px) {
+   .navButtons {
+      display: block;
+      padding-top: 5px;
+      position: relative;
+      left: 60px;
+   }
+
+   .navButtons li {
+      margin: 10px;
+   }
+
+   .navButtons a {
+      padding-top: 5px;
+      padding-bottom: 5px;
+      padding-left: 4px;
+      padding-right: 4px;
+    }
+
+    nav {
+      height: 140px;
+    }
+
+    .logo {
+      position: relative;
+      top: 20px;
+    }
+ }
+
+
 

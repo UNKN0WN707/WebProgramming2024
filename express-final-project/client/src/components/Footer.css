@@ -7,15 +7,27 @@
  *   Description: Stylesheet for Footer section.
  */
 
-<<<<<<< Updated upstream
-=======
+
  /* Style for Footer */
->>>>>>> Stashed changes
+
 footer {
    background: #1f1d29;
    font-family: 'Ubuntu', sans-serif;
 }
 
+ .end {
+    display: flex;
+    max-width: 1024px;
+    justify-content: center;
+    margin: auto;
+    background-color: white;
+    padding: 40px;
+    border-top: solid 9px #f18f8f;
+    position: relative;
+    bottom: 40px;
+    box-shadow: 2px 3px 3px;
+    background-color: #2a293a;
+ }
 .col p {
    color: white;
 }
@@ -61,3 +73,20 @@ footer {
    height: 2px;
    background-color: rgba(255, 255, 255, 0.209);
 }
+
+ .references li:first-child {
+    list-style: none;
+ }
+
+ @media screen and (max-width: 600px) {
+   .references li {
+      margin-right: 15px;
+   }
+
+   .references li a {
+      color: white;
+      font-size: 15px;
+      position: relative;
+      right: 8px;
+   }
+ }

@@ -12,7 +12,7 @@ RUN npm install
 
 COPY . .
 
-# Expose port 3001
+# Expose port 8080
 EXPOSE 3001
 
 # Define the command to run the Express app

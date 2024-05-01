@@ -80,7 +80,7 @@ const Form = () => {
   
     // Handle delete
     const handleDeleteAnime = (id) => {
-      fetch(`/api/animes/${id}`, {
+      fetch(`http://localhost:8081/api/animes/${id}`, {
         method: 'DELETE',
       })
       .then(response => {
